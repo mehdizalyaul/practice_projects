@@ -1,56 +1,56 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function WeatherApp() {
   const [weather, setWeather] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [searchCity, setSearchCity] = useState("London");
   const [city, setCity] = useState("London");
+  const [results, setResults] = useState([]);
 
-  useEffect(() => {
-    async function fetchWeather() {
-      setIsLoading(true);
-      setError("");
-      setWeather(null);
+  async function handleSearch() {
+    setIsLoading(true);
+    setIsLoading(true);
 
-      try {
-        const geoResponse = await fetch(
-          `https://geocoding-api.open-meteo.com/v1/search?name=${searchCity}`
-        );
-        if (!geoResponse.ok) throw Error("Geo response failed");
-
-        const geoData = await geoResponse.json();
-        if (!geoData.results || geoData.results.length === 0) {
-          throw Error("City not found");
-        }
-
-        const { latitude, longitude, name } = geoData.results[0];
-
-        const weatherResponse = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
-        );
-        if (!weatherResponse.ok) throw Error("Weather response failed");
-
-        const weatherData = await weatherResponse.json();
-
-        setWeather({ ...weatherData.current_weather, city: name });
-      } catch (error) {
-        setError("Something went wrong");
-        if (searchCity !== "London") {
-          setSearchCity("London");
-        }
-      } finally {
-        setIsLoading(false);
+    try {
+      if (!city.trim) {
+        return;
       }
-    }
-    fetchWeather();
-  }, [searchCity]);
+      const geoCityResponse = await fetch(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${city}`
+      );
 
-  function handleSearch() {
-    if (!city.trim()) {
-      return;
+      if (!geoCityResponse.ok) {
+        throw Error("geoCityResponse Failed");
+      }
+
+      const geoCityData = await geoCityResponse.json();
+      setResults(geoCityData.results);
+      setIsLoading(false);
+    } catch (error) {
+      setError("Something went wrong");
     }
-    setSearchCity(city);
+  }
+
+  async function fetchWeather(lat, lon, name, country) {
+    console.log(lat, lon);
+    try {
+      setResults([]);
+      setIsLoading(true);
+      const weatherResponse = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+      );
+      if (!weatherResponse.ok) {
+        console.log("Hanas");
+
+        throw Error("Weather response Failed");
+      }
+      const weatherData = await weatherResponse.json();
+
+      setWeather({ ...weatherData.current_weather, name, country });
+      setIsLoading(false);
+    } catch (error) {
+      setError("Something Went Wrong");
+    }
   }
 
   return (
@@ -63,11 +63,33 @@ export default function WeatherApp() {
         }}
       />
       <button onClick={handleSearch}>Search</button>
+
+      <ul>
+        {results &&
+          results.map((result) => {
+            return (
+              <li
+                key={result.id}
+                onClick={() =>
+                  fetchWeather(
+                    result.latitude,
+                    result.longitude,
+                    result.name,
+                    result.country
+                  )
+                }
+              >
+                {result.name} {result.country}
+              </li>
+            );
+          })}
+      </ul>
       {isLoading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {weather && (
         <>
-          <h3>Country : {weather.country} km/h</h3>
+          <h3>Country : {weather.country} </h3>
+          <h3>City : {weather.name} </h3>
           <h3>Temperature : {weather.temperature}°C</h3>
           <h3>Wind Speed : {weather.windspeed} km/h</h3>
         </>
