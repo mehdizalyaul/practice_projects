@@ -1,9 +1,9 @@
-import TodoManager from "./TodoManager.jsx";
+import Weather from "./Weather.jsx";
 
 function App() {
   return (
     <>
-      <TodoManager />
+      <Weather />
     </>
   );
 }
