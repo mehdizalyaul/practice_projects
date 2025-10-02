@@ -1,9 +1,9 @@
-import Weather from "./Weather.jsx";
+import TaskManager from "./TaskManager.jsx";
 
 function App() {
   return (
     <>
-      <Weather />
+      <TaskManager />
     </>
   );
 }
