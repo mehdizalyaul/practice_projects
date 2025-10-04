@@ -1,4 +1,5 @@
-import { useReducer } from "react";
+import { useReducer, useState, useMemo, useCallback } from "react";
+import TaskList from "./TaskList";
 
 const initialState = {
   tasks: [],
@@ -40,18 +41,44 @@ function reducer(state, action) {
 
 export default function Dashboard() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [title, setTitle] = useState("");
+
+  const total = useMemo(() => {
+    console.log("Recalculating total...");
+    return state.score * 1000000;
+  }, [state.score]);
+
+  const toggleTask = useCallback((id) => {
+    dispatch({ type: "TOGGLE_TASK", payload: id });
+  }, []);
+
+  function handleAddTask() {
+    if (!title.trim()) return;
+    dispatch({ type: "ADD_TASK", payload: title });
+    setTitle("");
+  }
 
   return (
-    <div>
+    <>
       <h2>Dashboard</h2>
-      <div>
-        <h3>Tasks</h3>
-        {/* Task components will go here */}
-      </div>
-      <div>
-        <h3>Scoreboard</h3>
-        {/* Scoreboard components will go here */}
-      </div>
-    </div>
+
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <button onClick={handleAddTask}>Add Task</button>
+      <TaskList tasks={state.tasks} toggleTask={toggleTask} />
+
+      <h3>Score: {state.score}</h3>
+      <h3>Bonus: {state.bonus}</h3>
+      <h3>Total: {total}</h3>
+      <button onClick={() => dispatch({ type: "INCREMENT_SCORE" })}>
+        Increment Score
+      </button>
+      <button onClick={() => dispatch({ type: "INCREMENT_BONUS" })}>
+        Increment Bonus
+      </button>
+    </>
   );
 }
