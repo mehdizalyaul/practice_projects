@@ -1,11 +1,9 @@
-import TaskManager from "./TaskManager.jsx";
+import ProfileCards from "./ProfileCards/ProfileCards";
 
-function App() {
+export default function App() {
   return (
     <>
-      <TaskManager />
+      <ProfileCards />
     </>
   );
 }
-
-export default App;
