@@ -3,20 +3,22 @@ import DashboardHome from "./PersonalDashboard/pages/DashboardHome";
 import ProfilesPage from "./PersonalDashboard/pages/ProfilesPage";
 import SettingsPage from "./PersonalDashboard/pages/SettingsPage";
 import TasksPage from "./PersonalDashboard/pages/TasksPage";
+import Navbar from "./PersonalDashboard/components/Navbar";
+import TaskDetails from "./PersonalDashboard/pages/TaskDetails";
+import "./PersonalDashboard/styles/global.css";
 
 export default function App() {
   return (
     <div>
-      <nav>
-        <Link to="/">Dashboard</Link> | <Link to="/tasks">Tasks</Link> |{" "}
-        <Link to="/profiles">Profiles</Link> |{" "}
-        <Link to="/settings">Settings</Link>
-      </nav>
+      <Navbar />
+
       <Routes>
         <Route path="/" element={<DashboardHome />} />
-        <Route path="/tasks" element={<TasksPage />} />
-        <Route path="/profiles" element={<ProfilesPage />} />
 
+        <Route path="/tasks" element={<TasksPage />}>
+          <Route path=":id" element={<TaskDetails />} />
+        </Route>
+        <Route path="/profiles" element={<ProfilesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </div>
