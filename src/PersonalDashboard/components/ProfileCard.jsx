@@ -1,11 +1,13 @@
 import React from "react";
+import "../styles/ProfilesPage.css";
 
 function ProfileCard({ deleteProfile, profile }) {
   return (
-    <div style={{ border: "1px solid black" }}>
-      <img src="avatar.png" alt={profile.name} />
-      <p>{profile.name}</p>
-      <button onClick={() => deleteProfile(profile.id)}>Delete</button>
+    <div className="profile-card">
+      <p className="profile-name">{profile.name}</p>
+      <button className="delete-btn" onClick={() => deleteProfile(profile.id)}>
+        Delete
+      </button>
     </div>
   );
 }

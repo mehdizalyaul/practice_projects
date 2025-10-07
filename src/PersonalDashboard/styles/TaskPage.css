@@ -1,0 +1,164 @@
+.tasks-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: sans-serif;
+}
+
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tasks-header h1 {
+  font-size: 1.8rem;
+}
+
+.tasks-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  transition: transform 0.1s ease-in-out;
+}
+
+.task-item:hover {
+  transform: scale(1.02);
+}
+
+.task-item p {
+  margin: 0;
+}
+
+button {
+  margin-left: 5px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:nth-child(2) {
+  background-color: #ff5757;
+}
+
+button:nth-child(3) {
+  background-color: #4caf50;
+}
+
+input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 80%;
+}
+
+.add-button {
+  background-color: #007bff;
+
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 700px;
+}
+
+.tasks-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9fb;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 20px;
+  margin-bottom: 12px;
+  transition: background-color 0.3s;
+}
+
+.tasks-item:hover {
+  background-color: #eef3f7;
+}
+
+/* Left side (title + status) */
+.tasks-item div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Remove link default style */
+.tasks-item a {
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.tasks-item a:hover {
+}
+
+/* Status text */
+.tasks-item p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Right side buttons */
+.tasks-item div:last-child button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: #007bff;
+  transition: background-color 0.3s;
+}
+
+.tasks-item div:last-child button:hover {
+  background-color: #0056b3;
+}
+
+.tasks-item div:last-child button:last-child {
+  background-color: #dc3545;
+}
+
+.tasks-item div:last-child button:last-child:hover {
+  background-color: #b52a36;
+}
+
+.tasks-header a {
+  display: inline-block;
+  margin-top: 16px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.tasks-header a:hover {
+  text-decoration: underline;
+}
