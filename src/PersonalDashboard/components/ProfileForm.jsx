@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import React from "react";
 import "../styles/ProfilesPage.css";
 
-function TaskForm({ addProfile, name, setName }) {
+function ProfileForm({ addProfile, name, setName }) {
   const inputRef = useRef();
   useEffect(() => {
     inputRef.current.focus();
@@ -21,4 +21,4 @@ function TaskForm({ addProfile, name, setName }) {
     </div>
   );
 }
-export default React.memo(TaskForm);
+export default React.memo(ProfileForm);
