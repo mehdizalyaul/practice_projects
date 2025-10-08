@@ -3,7 +3,7 @@ import { useReducer, createContext } from "react";
 export const TaskContext = createContext();
 
 const initialState = {
-  tasks: [],
+  tasks: JSON.parse(localStorage.getItem("tasks")) || [],
 };
 
 function taskReducer(state, action) {

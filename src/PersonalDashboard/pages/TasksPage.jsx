@@ -9,16 +9,17 @@ export default function TasksPage() {
   const [title, setTitle] = useState("");
   const { state, dispatch } = useContext(TaskContext);
   const [filteredTasks, setFilteredTasks] = useState(state.tasks);
+  const [searchTerm, setSearchTerm] = useState("");
   const searchInputRef = useRef("");
 
-  // Update filteredTasks whenever tasks or search input changes
   useEffect(() => {
-    const searchValue = searchInputRef.current.value.toLowerCase() || "";
+    localStorage.setItem("tasks", JSON.stringify(state.tasks));
+
     const filtered = state.tasks.filter((task) =>
-      task.title.toLowerCase().includes(searchValue)
+      task.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredTasks(filtered);
-  }, [state.tasks]);
+  }, [state.tasks, searchTerm]);
 
   const handleAddTask = useCallback(() => {
     if (!title.trim()) return;
@@ -26,14 +27,6 @@ export default function TasksPage() {
     dispatch({ type: "ADD_TASK", payload: newTask });
     setTitle("");
   }, [dispatch, title]);
-
-  const handleSearch = () => {
-    const value = searchInputRef.current.value.toLowerCase();
-    const filtered = state.tasks.filter((task) =>
-      task.title.toLowerCase().includes(value)
-    );
-    setFilteredTasks(filtered);
-  };
 
   const toggleTask = useCallback(
     (id) => {
@@ -51,18 +44,15 @@ export default function TasksPage() {
 
   return (
     <div className="tasks-container">
+      <h1>Tasks Page</h1>
+
       <div>
         <input
           type="text"
           placeholder="Search tasks..."
           ref={searchInputRef}
-          onChange={handleSearch} // filter as user types
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </div>
-
-      <div className="tasks-header">
-        <h1>Tasks Page</h1>
-        <Link to="/">← Go to Home</Link>
       </div>
 
       <TaskForm
@@ -75,6 +65,7 @@ export default function TasksPage() {
         tasks={filteredTasks}
         toggleTask={toggleTask}
         deleteTask={deleteTask}
+        searchInputRef={searchInputRef}
       />
 
       <Outlet />

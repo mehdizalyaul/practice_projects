@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useState, useRef, useEffect } from "react";
 import { ProfileContext } from "../context/ProfileContext";
 import ProfileCard from "../components/ProfileCard";
 import ProfileForm from "../components/ProfileForm";
@@ -7,6 +7,17 @@ import "../styles/ProfilesPage.css";
 export default function ProfilesPage() {
   const { profiles, setProfiles } = useContext(ProfileContext);
   const [name, setName] = useState("");
+  const [filteredProfiles, setFilteredProfiles] = useState(profiles || []);
+  const searchInputRef = useRef("");
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("profiles", JSON.stringify(profiles));
+    const filtered = profiles.filter((profile) =>
+      profile.name.toLowerCase().includes(search.toLowerCase())
+    );
+    setFilteredProfiles(filtered);
+  }, [profiles, search]);
 
   const addProfile = useCallback(() => {
     if (name.trim() === "") return;
@@ -27,11 +38,18 @@ export default function ProfilesPage() {
   return (
     <div className="profiles-container">
       <h1>Profiles Page</h1>
+      <input
+        type="text"
+        placeholder="Search profiles..."
+        ref={searchInputRef}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
       <ProfileForm name={name} setName={setName} addProfile={addProfile} />
 
       <div className="profiles-list">
-        {profiles && profiles.length > 0 ? (
-          profiles.map((profile) => (
+        {filteredProfiles && filteredProfiles.length > 0 ? (
+          filteredProfiles.map((profile) => (
             <ProfileCard
               key={profile.id}
               profile={profile}

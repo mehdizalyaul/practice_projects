@@ -1,62 +1,153 @@
+/* === Main Container === */
 .profiles-container {
-  max-width: 700px;
-  margin: 30px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  background-color: #fafafa;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 24px 32px;
+  background-color: #f9f9f9;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  font-family: "Inter", sans-serif;
+  color: #333;
 }
 
+/* === Heading === */
 .profiles-container h1 {
   text-align: center;
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 24px;
+}
+
+/* === Search Input === */
+.profiles-container input[type="text"] {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
   margin-bottom: 20px;
-  font-size: 1.8rem;
+  transition: all 0.2s ease;
 }
 
-.profiles-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
+.profiles-container input[type="text"]:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
 }
 
-.empty-message {
-  text-align: center;
-  margin-top: 15px;
-  font-style: italic;
-}
-
+/* === Profile Form === */
 .profile-form {
   display: flex;
-  justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  align-items: center;
 }
 
+/* Input and Button are visually same height */
 .profile-form input {
-  padding: 8px 12px;
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 1rem;
-  width: 200px;
+  transition: border-color 0.2s ease;
 }
 
 .profile-form input:focus {
-  outline: none;
   border-color: #007bff;
+  outline: none;
 }
 
 .profile-form button {
-  background-color: #007bff;
+  height: 40px; /* ✅ Match input height */
+  padding: 0 18px; /* ✅ Remove extra vertical padding */
+  background: #007bff;
+  color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 8px 14px;
-  font-size: 0.95rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.2s;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background 0.2s ease, transform 0.1s ease;
+  align-self: self-start;
 }
 
 .profile-form button:hover {
-  background-color: #0056b3;
+  background: #0056b3;
+}
+
+.profile-form button:active {
+  transform: scale(0.98);
+}
+
+/* === Profiles Grid === */
+.profiles-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+/* === Profile Card === */
+.profile-card {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.profile-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 1px solid rgb(0, 107, 247);
+}
+
+.profile-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.profile-card p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.profile-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.delete-button {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.delete-button:hover {
+  background: #b02a37;
+}
+
+.delete-button:active {
+  transform: scale(0.97);
+}
+
+/* === Empty State === */
+.empty-message {
+  text-align: center;
+  color: #777;
+  margin-top: 30px;
+  font-style: italic;
 }

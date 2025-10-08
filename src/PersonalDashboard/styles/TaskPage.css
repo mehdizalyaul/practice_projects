@@ -7,6 +7,9 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: sans-serif;
 }
+.tasks-container > h1 {
+  text-align: center;
+}
 
 .tasks-header {
   display: flex;
@@ -70,6 +73,7 @@ input {
   border: 1px solid #ccc;
   border-radius: 6px;
   width: 80%;
+  margin-bottom: 15px;
 }
 
 .add-button {
