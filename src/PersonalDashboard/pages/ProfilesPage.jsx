@@ -3,6 +3,7 @@ import { ProfileContext } from "../context/ProfileContext";
 import ProfileCard from "../components/ProfileCard";
 import ProfileForm from "../components/ProfileForm";
 import "../styles/ProfilesPage.css";
+import { NotificationContext } from "../context/NotificationContext";
 
 export default function ProfilesPage() {
   const { profiles, setProfiles } = useContext(ProfileContext);
@@ -10,7 +11,7 @@ export default function ProfilesPage() {
   const [filteredProfiles, setFilteredProfiles] = useState(profiles || []);
   const searchInputRef = useRef("");
   const [search, setSearch] = useState("");
-
+  const { showNotification } = useContext(NotificationContext);
   useEffect(() => {
     localStorage.setItem("profiles", JSON.stringify(profiles));
     const filtered = profiles.filter((profile) =>
@@ -23,6 +24,8 @@ export default function ProfilesPage() {
     if (name.trim() === "") return;
     const newProfile = { id: Date.now(), name };
     setProfiles([...profiles, newProfile]);
+    showNotification("Profile added successfully!", "success");
+
     setName("");
   }, [name, profiles, setProfiles]);
 
@@ -31,6 +34,7 @@ export default function ProfilesPage() {
       setProfiles((prevProfiles) =>
         prevProfiles.filter((profile) => profile.id !== id)
       );
+      showNotification("Profile deleted!", "error");
     },
     [setProfiles]
   );

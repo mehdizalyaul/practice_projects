@@ -1,9 +1,11 @@
 import { useContext, useState, useCallback, useRef, useEffect } from "react";
 import { TaskContext } from "../context/TaskContext";
+import { NotificationContext } from "../context/NotificationContext";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import "../styles/TaskPage.css";
+import "../styles/Notification.css";
 
 export default function TasksPage() {
   const [title, setTitle] = useState("");
@@ -11,6 +13,7 @@ export default function TasksPage() {
   const [filteredTasks, setFilteredTasks] = useState(state.tasks);
   const [searchTerm, setSearchTerm] = useState("");
   const searchInputRef = useRef("");
+  const { showNotification } = useContext(NotificationContext);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(state.tasks));
@@ -25,12 +28,14 @@ export default function TasksPage() {
     if (!title.trim()) return;
     const newTask = { id: Date.now(), title, completed: false };
     dispatch({ type: "ADD_TASK", payload: newTask });
+    showNotification("Task added successfully!", "success");
     setTitle("");
   }, [dispatch, title]);
 
   const toggleTask = useCallback(
     (id) => {
       dispatch({ type: "TOGGLE_TASK", payload: id });
+      showNotification("Task status updated!", "info");
     },
     [dispatch]
   );
@@ -38,6 +43,7 @@ export default function TasksPage() {
   const deleteTask = useCallback(
     (id) => {
       dispatch({ type: "DELETE_TASK", payload: id });
+      showNotification("Task deleted!", "error");
     },
     [dispatch]
   );
