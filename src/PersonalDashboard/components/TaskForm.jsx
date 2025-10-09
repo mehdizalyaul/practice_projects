@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import "../styles/TaskPage.css";
+import { motion } from "framer-motion";
 
 export default function TaskForm({ handleAddTask, title, setTitle }) {
   const inputRef = useRef();
@@ -10,7 +11,10 @@ export default function TaskForm({ handleAddTask, title, setTitle }) {
   }, [handleAddTask]);
 
   return (
-    <div>
+    <motion.div
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+    >
       <input
         type="text"
         value={title}
@@ -21,6 +25,6 @@ export default function TaskForm({ handleAddTask, title, setTitle }) {
       <button className="add-button" onClick={handleAddTask}>
         Add Task
       </button>
-    </div>
+    </motion.div>
   );
 }

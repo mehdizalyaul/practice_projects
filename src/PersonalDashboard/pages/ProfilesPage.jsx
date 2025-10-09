@@ -4,6 +4,7 @@ import ProfileCard from "../components/ProfileCard";
 import ProfileForm from "../components/ProfileForm";
 import "../styles/ProfilesPage.css";
 import { NotificationContext } from "../context/NotificationContext";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ProfilesPage() {
   const { profiles, setProfiles } = useContext(ProfileContext);
@@ -40,30 +41,37 @@ export default function ProfilesPage() {
   );
 
   return (
-    <div className="profiles-container">
-      <h1>Profiles Page</h1>
-      <input
-        type="text"
-        placeholder="Search profiles..."
-        ref={searchInputRef}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
+        className="profiles-container"
+      >
+        <h1>Profiles Page</h1>
+        <input
+          type="text"
+          placeholder="Search profiles..."
+          ref={searchInputRef}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-      <ProfileForm name={name} setName={setName} addProfile={addProfile} />
+        <ProfileForm name={name} setName={setName} addProfile={addProfile} />
 
-      <div className="profiles-list">
-        {filteredProfiles && filteredProfiles.length > 0 ? (
-          filteredProfiles.map((profile) => (
-            <ProfileCard
-              key={profile.id}
-              profile={profile}
-              deleteProfile={deleteProfile}
-            />
-          ))
-        ) : (
-          <p className="empty-message">No profiles yet.</p>
-        )}
-      </div>
-    </div>
+        <div className="profiles-list">
+          {filteredProfiles && filteredProfiles.length > 0 ? (
+            filteredProfiles.map((profile) => (
+              <ProfileCard
+                key={profile.id}
+                profile={profile}
+                deleteProfile={deleteProfile}
+              />
+            ))
+          ) : (
+            <p className="empty-message">No profiles yet.</p>
+          )}
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

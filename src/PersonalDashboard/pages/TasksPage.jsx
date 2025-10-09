@@ -6,6 +6,7 @@ import TaskList from "../components/TaskList";
 import { Outlet } from "react-router-dom";
 import "../styles/TaskPage.css";
 import "../styles/Notification.css";
+import { motion } from "framer-motion";
 
 export default function TasksPage() {
   const [title, setTitle] = useState("");
@@ -49,7 +50,12 @@ export default function TasksPage() {
   );
 
   return (
-    <div className="tasks-container">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="tasks-container"
+    >
       <h1>Tasks Page</h1>
 
       <div>
@@ -75,6 +81,6 @@ export default function TasksPage() {
       />
 
       <Outlet />
-    </div>
+    </motion.div>
   );
 }
