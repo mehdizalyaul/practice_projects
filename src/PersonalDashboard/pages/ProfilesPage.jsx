@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useRef, useEffect } from "react";
+import { useCallback, useContext, useState, useRef, useMemo } from "react";
 import { ProfileContext } from "../context/ProfileContext";
 import ProfileCard from "../components/ProfileCard";
 import ProfileForm from "../components/ProfileForm";
@@ -9,16 +9,14 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function ProfilesPage() {
   const { profiles, setProfiles } = useContext(ProfileContext);
   const [name, setName] = useState("");
-  const [filteredProfiles, setFilteredProfiles] = useState(profiles || []);
   const searchInputRef = useRef("");
   const [search, setSearch] = useState("");
   const { showNotification } = useContext(NotificationContext);
 
-  useEffect(() => {
-    const filtered = profiles.filter((profile) =>
-      profile.name.toLowerCase().includes(search.toLowerCase())
+  const filteredProfiles = useMemo(() => {
+    return profiles.filter((profile) =>
+      profile.title.toLowerCase().includes(search.toLowerCase())
     );
-    setFilteredProfiles(filtered);
   }, [profiles, search]);
 
   const addProfile = useCallback(async () => {

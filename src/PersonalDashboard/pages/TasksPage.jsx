@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback, useRef, useEffect } from "react";
+import { useContext, useState, useCallback, useRef, useMemo } from "react";
 import { TaskContext } from "../context/TaskContext";
 import { NotificationContext } from "../context/NotificationContext";
 import TaskForm from "../components/TaskForm";
@@ -12,16 +12,14 @@ export default function TasksPage() {
   const [title, setTitle] = useState("");
   const { tasks, dispatch, error, setError, loading, setLoading } =
     useContext(TaskContext);
-  const [filteredTasks, setFilteredTasks] = useState(tasks);
   const [searchTerm, setSearchTerm] = useState("");
   const searchInputRef = useRef("");
   const { showNotification } = useContext(NotificationContext);
 
-  useEffect(() => {
-    const filtered = tasks.filter((task) =>
+  const filteredTasks = useMemo(() => {
+    return tasks.filter((task) =>
       task.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    setFilteredTasks(filtered);
   }, [tasks, searchTerm]);
 
   const handleAddTask = useCallback(async () => {
