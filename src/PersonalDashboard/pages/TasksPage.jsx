@@ -10,44 +10,81 @@ import { motion } from "framer-motion";
 
 export default function TasksPage() {
   const [title, setTitle] = useState("");
-  const { state, dispatch } = useContext(TaskContext);
-  const [filteredTasks, setFilteredTasks] = useState(state.tasks);
+  const { tasks, dispatch, error, setError, loading, setLoading } =
+    useContext(TaskContext);
+  const [filteredTasks, setFilteredTasks] = useState(tasks);
   const [searchTerm, setSearchTerm] = useState("");
   const searchInputRef = useRef("");
   const { showNotification } = useContext(NotificationContext);
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(state.tasks));
-
-    const filtered = state.tasks.filter((task) =>
+    const filtered = tasks.filter((task) =>
       task.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredTasks(filtered);
-  }, [state.tasks, searchTerm]);
+  }, [tasks, searchTerm]);
 
-  const handleAddTask = useCallback(() => {
-    if (!title.trim()) return;
-    const newTask = { id: Date.now(), title, completed: false };
-    dispatch({ type: "ADD_TASK", payload: newTask });
-    showNotification("Task added successfully!", "success");
-    setTitle("");
-  }, [dispatch, title]);
+  const handleAddTask = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("http://localhost:5000/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, completed: false }),
+      });
+
+      const newTask = await res.json();
+
+      dispatch({ type: "ADD_TASK", payload: newTask });
+
+      showNotification("Task added successfully!", "success");
+
+      setTitle("");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [dispatch, title, showNotification]);
 
   const toggleTask = useCallback(
-    (id) => {
-      dispatch({ type: "TOGGLE_TASK", payload: id });
-      showNotification("Task status updated!", "info");
+    async (id) => {
+      try {
+        const task = tasks.find((t) => t.id === id);
+
+        const updated = { ...task, completed: !task.completed };
+
+        await fetch(`http://localhost:5000/tasks/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updated),
+        });
+
+        dispatch({ type: "TOGGLE_TASK", payload: id });
+        showNotification("Task status updated!", "info");
+      } catch (error) {
+        setError(true);
+      }
     },
-    [dispatch]
+    [dispatch, tasks, showNotification]
   );
 
   const deleteTask = useCallback(
-    (id) => {
-      dispatch({ type: "DELETE_TASK", payload: id });
-      showNotification("Task deleted!", "error");
+    async (id) => {
+      try {
+        await fetch(`http://localhost:5000/tasks/${id}`, { method: "DELETE" });
+        dispatch({ type: "DELETE_TASK", payload: id });
+        showNotification("Task deleted!", "error");
+      } catch (error) {
+        setError(true);
+      }
     },
     [dispatch]
   );
+
+  if (loading) return <p>Loading tasks...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
     <motion.div
@@ -57,7 +94,6 @@ export default function TasksPage() {
       className="tasks-container"
     >
       <h1>Tasks Page</h1>
-
       <div>
         <input
           type="text"

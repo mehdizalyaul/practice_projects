@@ -1,0 +1,50 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Learn React",
+      "completed": true
+    },
+    {
+      "id": "2",
+      "title": "Build Dashboard",
+      "completed": true
+    },
+    {
+      "id": "850d",
+      "title": "Learn Python",
+      "completed": false
+    },
+    {
+      "id": "46f2",
+      "title": "Learn CSS",
+      "completed": true
+    }
+  ],
+  "profiles": [
+    {
+      "id": "1",
+      "name": "Mehdi"
+    },
+    {
+      "id": "c1e1",
+      "name": "Hamza"
+    },
+    {
+      "id": "e2fa",
+      "name": "Edouard"
+    },
+    {
+      "id": "691a",
+      "name": "Bilal"
+    },
+    {
+      "id": "ab34",
+      "name": "Add"
+    },
+    {
+      "id": "57e6",
+      "name": "Popi"
+    }
+  ]
+}

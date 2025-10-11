@@ -5,16 +5,35 @@ import "../styles/TaskDetails.css";
 
 export default function TaskDetails() {
   const { id } = useParams();
-  const { state } = useContext(TaskContext);
-  const task = state.tasks.find((t) => t.id === Number(id));
+  const { tasks, loading } = useContext(TaskContext);
 
-  if (!task)
+  if (loading) {
+    return (
+      <div className="task-details">
+        <p>Loading task...</p>
+        <Link to="/tasks">← Back to Tasks</Link>
+      </div>
+    );
+  }
+
+  if (!tasks || tasks.length === 0) {
+    return (
+      <div className="task-details">
+        <p>No tasks available.</p>
+        <Link to="/tasks">← Back to Tasks</Link>
+      </div>
+    );
+  }
+
+  const task = tasks.find((t) => t.id === id);
+  if (!task) {
     return (
       <div className="task-details">
         <p>Task not found.</p>
         <Link to="/tasks">← Back to Tasks</Link>
       </div>
     );
+  }
 
   return (
     <div className="task-details">

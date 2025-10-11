@@ -13,31 +13,42 @@ export default function ProfilesPage() {
   const searchInputRef = useRef("");
   const [search, setSearch] = useState("");
   const { showNotification } = useContext(NotificationContext);
+
   useEffect(() => {
-    localStorage.setItem("profiles", JSON.stringify(profiles));
     const filtered = profiles.filter((profile) =>
       profile.name.toLowerCase().includes(search.toLowerCase())
     );
     setFilteredProfiles(filtered);
   }, [profiles, search]);
 
-  const addProfile = useCallback(() => {
+  const addProfile = useCallback(async () => {
     if (name.trim() === "") return;
-    const newProfile = { id: Date.now(), name };
-    setProfiles([...profiles, newProfile]);
+    const res = await fetch(`http://localhost:5000/profiles`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    });
+    const newProfile = await res.json();
+    setProfiles((prevProfiles) => {
+      return [...prevProfiles, newProfile];
+    });
     showNotification("Profile added successfully!", "success");
 
     setName("");
-  }, [name, profiles, setProfiles]);
+  }, [name, showNotification]);
 
   const deleteProfile = useCallback(
-    (id) => {
+    async (id) => {
+      await fetch(`http://localhost:5000/profiles/${id}`, {
+        method: "DELETE",
+      });
+
       setProfiles((prevProfiles) =>
         prevProfiles.filter((profile) => profile.id !== id)
       );
       showNotification("Profile deleted!", "error");
     },
-    [setProfiles]
+    [showNotification]
   );
 
   return (
