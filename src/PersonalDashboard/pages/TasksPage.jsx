@@ -39,8 +39,8 @@ export default function TasksPage() {
       showNotification("Task added successfully!", "success");
 
       setTitle("");
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -48,6 +48,8 @@ export default function TasksPage() {
 
   const toggleTask = useCallback(
     async (id) => {
+      setLoading(true);
+      setError(null);
       try {
         const task = tasks.find((t) => t.id === id);
 
@@ -62,7 +64,9 @@ export default function TasksPage() {
         dispatch({ type: "TOGGLE_TASK", payload: id });
         showNotification("Task status updated!", "info");
       } catch (error) {
-        setError(true);
+        setError(error);
+      } finally {
+        setLoading(error.message);
       }
     },
     [dispatch, tasks, showNotification]
@@ -70,12 +74,16 @@ export default function TasksPage() {
 
   const deleteTask = useCallback(
     async (id) => {
+      setLoading(true);
+      setError(null);
       try {
         await fetch(`http://localhost:5000/tasks/${id}`, { method: "DELETE" });
         dispatch({ type: "DELETE_TASK", payload: id });
         showNotification("Task deleted!", "error");
       } catch (error) {
-        setError(true);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     },
     [dispatch]

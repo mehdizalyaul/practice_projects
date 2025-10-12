@@ -7,7 +7,8 @@ import { NotificationContext } from "../context/NotificationContext";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ProfilesPage() {
-  const { profiles, setProfiles } = useContext(ProfileContext);
+  const { profiles, setProfiles, error, setError, loading, setLoading } =
+    useContext(ProfileContext);
   const [name, setName] = useState("");
   const searchInputRef = useRef("");
   const [search, setSearch] = useState("");
@@ -15,7 +16,7 @@ export default function ProfilesPage() {
 
   const filteredProfiles = useMemo(() => {
     return profiles.filter((profile) =>
-      profile.title.toLowerCase().includes(search.toLowerCase())
+      profile.name.toLowerCase().includes(search.toLowerCase())
     );
   }, [profiles, search]);
 
@@ -48,6 +49,9 @@ export default function ProfilesPage() {
     },
     [showNotification]
   );
+
+  if (loading) return <p>Loading profiles...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
     <AnimatePresence>

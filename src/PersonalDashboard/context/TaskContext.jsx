@@ -44,6 +44,6 @@ export default function TaskProvider({ children }) {
     fetchTasks();
   }, []);
 
-  const value = { tasks, dispatch, loading, error };
+  const value = { tasks, dispatch, loading, error, setError, setLoading };
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;
 }
