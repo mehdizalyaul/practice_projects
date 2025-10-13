@@ -5,6 +5,9 @@ import ProfileForm from "../components/ProfileForm";
 import "../styles/ProfilesPage.css";
 import { NotificationContext } from "../context/NotificationContext";
 import { motion, AnimatePresence } from "framer-motion";
+import Spinner from "../components/Spinner";
+import Error from "../components/Error";
+import { data } from "react-router-dom";
 
 export default function ProfilesPage() {
   const { profiles, setProfiles, error, setError, loading, setLoading } =
@@ -32,7 +35,15 @@ export default function ProfilesPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
       });
-      const newProfile = await res.json();
+      const data = await res.json();
+      if (!res.ok) {
+        const message = data.errors
+          ? data.errors[0].msg
+          : "Something went wrong";
+        const err = new Error(message);
+        err.response = data;
+        throw err;
+      }
       setProfiles((prevProfiles) => {
         return [...prevProfiles, newProfile];
       });
@@ -41,7 +52,7 @@ export default function ProfilesPage() {
       setName("");
     } catch (error) {
       console.error("Fail to fetch add profile", error);
-      setError(error.message);
+      setError(error.response.errors[0].msg);
     } finally {
       setLoading(false);
     }
@@ -71,8 +82,7 @@ export default function ProfilesPage() {
     [showNotification]
   );
 
-  if (loading) return <p>Loading profiles...</p>;
-  if (error) return <p className="error">{error}</p>;
+  if (loading) return <Spinner />;
 
   return (
     <AnimatePresence>
@@ -91,6 +101,7 @@ export default function ProfilesPage() {
         />
 
         <ProfileForm name={name} setName={setName} addProfile={addProfile} />
+        {error && <Error message={error} />}
 
         <div className="profiles-list">
           {filteredProfiles && filteredProfiles.length > 0 ? (

@@ -3,10 +3,14 @@ import { TaskContext } from "../context/TaskContext";
 import { NotificationContext } from "../context/NotificationContext";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
+import Spinner from "../components/Spinner";
+import Error from "../components/Error";
+
 import { Outlet } from "react-router-dom";
 import "../styles/TaskPage.css";
 import "../styles/Notification.css";
 import { motion } from "framer-motion";
+import { validateProfile } from "../../../server/validators/validateProfile";
 
 export default function TasksPage() {
   const [title, setTitle] = useState("");
@@ -23,8 +27,10 @@ export default function TasksPage() {
   }, [tasks, searchTerm]);
 
   const handleAddTask = useCallback(async () => {
+    if (title.trim() === "") return;
     setLoading(true);
     setError(null);
+
     try {
       const res = await fetch("http://localhost:5000/tasks", {
         method: "POST",
@@ -32,15 +38,24 @@ export default function TasksPage() {
         body: JSON.stringify({ title }),
       });
 
-      const newTask = await res.json();
+      const data = await res.json();
 
-      dispatch({ type: "ADD_TASK", payload: newTask });
+      if (!res.ok) {
+        const message =
+          data?.errors?.[0]?.msg || data?.message || "Something went wrong";
 
+        // Attach the entire backend response for debugging
+        const err = new Error(message);
+        err.response = data;
+        throw err;
+      }
+
+      dispatch({ type: "ADD_TASK", payload: data });
       showNotification("Task added successfully!", "success");
-
       setTitle("");
     } catch (error) {
-      setError(error.message);
+      console.error("Caught error:", error);
+      setError(error.response.errors[0].msg || "Unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -88,9 +103,7 @@ export default function TasksPage() {
     },
     [dispatch]
   );
-
-  if (loading) return <p>Loading tasks...</p>;
-  if (error) return <p className="error">{error}</p>;
+  if (loading) return <Spinner />;
 
   return (
     <motion.div
@@ -114,6 +127,7 @@ export default function TasksPage() {
         title={title}
         setTitle={setTitle}
       />
+      {error && <Error message={error} />}
 
       <TaskList
         tasks={filteredTasks}

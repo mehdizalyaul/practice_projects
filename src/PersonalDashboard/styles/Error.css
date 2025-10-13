@@ -1,0 +1,21 @@
+.error-container {
+  background-color: #fee2e2; /* soft red background */
+  color: #b91c1c; /* dark red text */
+  border: 1px solid #fca5a5; /* light red border */
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
