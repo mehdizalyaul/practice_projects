@@ -11,17 +11,17 @@ export default function ProfileProvider({ children }) {
   useEffect(() => {
     const fetchProfiles = async () => {
       setError(null);
-      setLoading(false);
+      setLoading(true);
       try {
         const res = await fetch("http://localhost:5000/profiles");
 
-        const data = res.json();
+        const data = await res.json();
         setProfiles(data);
       } catch (err) {
         console.error("Error fetching tasks:", err);
         setError(err);
       } finally {
-        setLoading(true);
+        setLoading(false);
       }
     };
     fetchProfiles();

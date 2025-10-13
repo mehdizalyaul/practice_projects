@@ -29,7 +29,7 @@ export default function TasksPage() {
       const res = await fetch("http://localhost:5000/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, completed: false }),
+        body: JSON.stringify({ title }),
       });
 
       const newTask = await res.json();
@@ -66,7 +66,7 @@ export default function TasksPage() {
       } catch (error) {
         setError(error);
       } finally {
-        setLoading(error.message);
+        setLoading(false);
       }
     },
     [dispatch, tasks, showNotification]

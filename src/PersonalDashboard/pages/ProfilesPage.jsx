@@ -22,30 +22,51 @@ export default function ProfilesPage() {
 
   const addProfile = useCallback(async () => {
     if (name.trim() === "") return;
-    const res = await fetch(`http://localhost:5000/profiles`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
-    });
-    const newProfile = await res.json();
-    setProfiles((prevProfiles) => {
-      return [...prevProfiles, newProfile];
-    });
-    showNotification("Profile added successfully!", "success");
 
-    setName("");
+    setError(null);
+    setLoading(true);
+
+    try {
+      const res = await fetch(`http://localhost:5000/profiles`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+      const newProfile = await res.json();
+      setProfiles((prevProfiles) => {
+        return [...prevProfiles, newProfile];
+      });
+      showNotification("Profile added successfully!", "success");
+
+      setName("");
+    } catch (error) {
+      console.error("Fail to fetch add profile", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   }, [name, showNotification]);
 
   const deleteProfile = useCallback(
     async (id) => {
-      await fetch(`http://localhost:5000/profiles/${id}`, {
-        method: "DELETE",
-      });
+      setError(null);
+      setLoading(true);
 
-      setProfiles((prevProfiles) =>
-        prevProfiles.filter((profile) => profile.id !== id)
-      );
-      showNotification("Profile deleted!", "error");
+      try {
+        await fetch(`http://localhost:5000/profiles/${id}`, {
+          method: "DELETE",
+        });
+
+        setProfiles((prevProfiles) =>
+          prevProfiles.filter((profile) => profile.id !== id)
+        );
+        showNotification("Profile deleted!", "error");
+      } catch (error) {
+        console.error("Fail to delete a profile", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     },
     [showNotification]
   );

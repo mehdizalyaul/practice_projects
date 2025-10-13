@@ -18,4 +18,4 @@ db.connect((err) => {
   console.log("Connected to MySQL database");
 });
 
-module.exports = db;
+export default db;

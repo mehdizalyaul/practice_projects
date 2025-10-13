@@ -1,4 +1,4 @@
-import db from "../db.js"; // your MySQL connection
+import db from "../db.js";
 
 // Get all tasks
 export const getAllTasks = () => {
