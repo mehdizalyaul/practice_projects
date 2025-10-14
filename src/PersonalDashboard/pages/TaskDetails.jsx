@@ -2,18 +2,14 @@ import { useParams, Link } from "react-router-dom";
 import { useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
 import "../styles/TaskDetails.css";
+import Spinner from "../components/Spinner";
 
 export default function TaskDetails() {
   const { id } = useParams();
   const { tasks, loading } = useContext(TaskContext);
 
   if (loading) {
-    return (
-      <div className="task-details">
-        <p>Loading task...</p>
-        <Link to="/tasks">← Back to Tasks</Link>
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (!tasks || tasks.length === 0) {
@@ -25,7 +21,8 @@ export default function TaskDetails() {
     );
   }
 
-  const task = tasks.find((t) => t.id === id);
+  const task = tasks.find((t) => t.id === Number(id));
+  console.log(task);
   if (!task) {
     return (
       <div className="task-details">

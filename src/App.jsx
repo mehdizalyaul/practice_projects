@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import DashboardHome from "./PersonalDashboard/pages/DashboardHome";
 import ProfilesPage from "./PersonalDashboard/pages/ProfilesPage";
 import SettingsPage from "./PersonalDashboard/pages/SettingsPage";
