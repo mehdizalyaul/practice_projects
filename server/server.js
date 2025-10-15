@@ -1,8 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import tasksRoute from "./routes/taskRoutes.js"; // import route
-import profileRoute from "./routes/profileRoutes.js"; // import route
+import tasksRoute from "./routes/taskRoutes.js";
+import profileRoute from "./routes/profileRoutes.js";
+import authRoute from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect the route
+app.use("/auth", authRoute);
 app.use("/tasks", tasksRoute);
 app.use("/profiles", profileRoute);
 
