@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect the route
-app.use("/auth", authRoute);
+app.use("/api/auth", authRoute);
 app.use("/tasks", tasksRoute);
 app.use("/profiles", profileRoute);
 

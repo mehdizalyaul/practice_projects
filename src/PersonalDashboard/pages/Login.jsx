@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 export default function Login() {
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState("");
@@ -13,7 +13,7 @@ export default function Login() {
     e.preventDefault();
     const res = await login(email, password);
 
-    if (res.success) navigate("/dashboard");
+    if (res.success) navigate("/");
     else setError(res.message);
   };
 
@@ -37,6 +37,7 @@ export default function Login() {
         />
         <button type="submit">Login</button>
       </form>
+      <Link to="/register">Register</Link>
       {error && <p>{error}</p>}
     </div>
   );

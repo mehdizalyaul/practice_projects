@@ -1,25 +1,25 @@
-export const registerUser = async (data) => {
-  const res = fetch("http://localhost:5000/api/auth/register", {
+export const registerUser = async (name, email, password) => {
+  const res = await fetch("http://localhost:5000/api/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      name: data.name,
-      email: data.email,
-      password: data.password,
+      name: name,
+      email: email,
+      password: password,
     }),
   });
 
-  return res.json();
+  return await res.json();
 };
 
-export const loginUser = async (data) => {
-  const res = fetch("http://localhost:5000/api/auth/login", {
+export const loginUser = async (email, password) => {
+  const res = await fetch("http://localhost:5000/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      email: data.email,
-      password: data.password,
+      email: email,
+      password: password,
     }),
   });
-  return res.json();
+  return await res.json();
 };

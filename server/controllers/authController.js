@@ -1,5 +1,5 @@
 import { createUser, findUserByEmail } from "../models/authModel.js";
-import bcrypt from "bcryptjs";
+import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret123";
@@ -32,13 +32,12 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     //  Check if user exists
     const user = await findUserByEmail(email);
     if (!user) return res.status(400).json({ message: "User not found" });
 
     //  Compare passwords
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 

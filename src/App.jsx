@@ -1,10 +1,14 @@
 import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./PersonalDashboard/routes/ProtectedRoute";
 import DashboardHome from "./PersonalDashboard/pages/DashboardHome";
 import ProfilesPage from "./PersonalDashboard/pages/ProfilesPage";
 import SettingsPage from "./PersonalDashboard/pages/SettingsPage";
 import TasksPage from "./PersonalDashboard/pages/TasksPage";
+import Login from "./PersonalDashboard/pages/Login";
+import Register from "./PersonalDashboard/pages/Register";
 import Navbar from "./PersonalDashboard/components/Navbar";
 import TaskDetails from "./PersonalDashboard/pages/TaskDetails";
+
 import "./PersonalDashboard/styles/global.css";
 import Notification from "./PersonalDashboard/components/Notification";
 export default function App() {
@@ -13,13 +17,19 @@ export default function App() {
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<DashboardHome />} />
+        {/* Public routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-        <Route path="/tasks" element={<TasksPage />}>
-          <Route path=":id" element={<TaskDetails />} />
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<DashboardHome />} />
+          <Route path="/tasks" element={<TasksPage />}>
+            <Route path=":id" element={<TaskDetails />} />
+          </Route>
+          <Route path="/profiles" element={<ProfilesPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Route>
-        <Route path="/profiles" element={<ProfilesPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
       <Notification />
     </div>

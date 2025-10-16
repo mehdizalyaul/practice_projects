@@ -12,9 +12,10 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log({ name, email, password });
     const res = await register(name, email, password);
 
-    if (res.success) navigate("/dashboard");
+    if (res.success) navigate("/");
     else setError(res.message);
   };
 
