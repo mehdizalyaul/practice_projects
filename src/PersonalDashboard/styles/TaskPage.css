@@ -1,16 +1,33 @@
+/* Container */
 .tasks-container {
   max-width: 600px;
   margin: 40px auto;
-  background-color: #f9f9f9;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: sans-serif;
+  transition: background 0.3s, color 0.3s;
 }
+
+/* Light theme */
+body.light .tasks-container {
+  background-color: #f9f9f9;
+  color: #222;
+}
+
+/* Dark theme */
+body.dark .tasks-container {
+  background-color: #2c2c2c;
+  color: #f1f1f1;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+}
+
+/* Heading */
 .tasks-container > h1 {
   text-align: center;
 }
 
+/* Header */
 .tasks-header {
   display: flex;
   justify-content: space-between;
@@ -22,70 +39,19 @@
   font-size: 1.8rem;
 }
 
-.tasks-list {
-  list-style: none;
-  padding: 0;
+.tasks-header a {
+  display: inline-block;
+  margin-top: 16px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
 }
 
-.task-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  margin-bottom: 10px;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #eee;
-  transition: transform 0.1s ease-in-out;
+.tasks-header a:hover {
+  text-decoration: underline;
 }
 
-.task-item:hover {
-  transform: scale(1.02);
-}
-
-.task-item p {
-  margin: 0;
-}
-
-button {
-  margin-left: 5px;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
-button:nth-child(2) {
-  background-color: #ff5757;
-}
-
-button:nth-child(3) {
-  background-color: #4caf50;
-}
-
-input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 80%;
-  margin-bottom: 15px;
-}
-
-.add-button {
-  background-color: #007bff;
-
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  margin-left: 8px;
-  cursor: pointer;
-}
-
+/* List */
 .tasks-list {
   list-style: none;
   padding: 0;
@@ -93,30 +59,56 @@ input {
   max-width: 700px;
 }
 
-.tasks-item {
+/* Task item */
+.tasks-item,
+.task-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f8f9fb;
-  border: 1px solid #ddd;
   border-radius: 8px;
   padding: 12px 20px;
   margin-bottom: 12px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.1s ease-in-out;
 }
 
-.tasks-item:hover {
+/* Light theme task items */
+body.light .tasks-item,
+body.light .task-item {
+  background-color: #f8f9fb;
+  border: 1px solid #ddd;
+}
+
+/* Dark theme task items */
+body.dark .tasks-item,
+body.dark .task-item {
+  background-color: #3a3a3a;
+  border: 1px solid #555;
+  color: #f1f1f1;
+}
+
+.tasks-item:hover,
+.task-item:hover {
+  transform: scale(1.02);
+}
+
+body.light .tasks-item:hover,
+body.light .task-item:hover {
   background-color: #eef3f7;
 }
 
-/* Left side (title + status) */
+body.dark .tasks-item:hover,
+body.dark .task-item:hover {
+  background-color: #4a4a4a;
+}
+
+/* Left side */
 .tasks-item div:first-child {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-/* Remove link default style */
+/* Links */
 .tasks-item a {
   text-decoration: none;
   font-weight: 600;
@@ -124,6 +116,7 @@ input {
 }
 
 .tasks-item a:hover {
+  text-decoration: underline;
 }
 
 /* Status text */
@@ -132,37 +125,98 @@ input {
   font-size: 14px;
 }
 
-/* Right side buttons */
-.tasks-item div:last-child button {
+/* Buttons container */
+.tasks-item div:last-child button,
+button {
   margin-left: 10px;
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Light theme buttons */
+body.light .tasks-item div:last-child button,
+body.light button {
   background-color: #007bff;
-  transition: background-color 0.3s;
+  color: #fff;
 }
 
-.tasks-item div:last-child button:hover {
-  background-color: #0056b3;
-}
-
-.tasks-item div:last-child button:last-child {
+body.light .tasks-item div:last-child button:last-child {
   background-color: #dc3545;
 }
 
-.tasks-item div:last-child button:last-child:hover {
+body.light .tasks-item div:last-child button:last-child:hover {
   background-color: #b52a36;
 }
 
-.tasks-header a {
-  display: inline-block;
-  margin-top: 16px;
-  text-decoration: none;
-  font-weight: 600;
+body.light .tasks-item div:last-child button:hover,
+body.light button:hover {
+  background-color: #0056b3;
 }
 
-.tasks-header a:hover {
-  text-decoration: underline;
+/* Dark theme buttons */
+body.dark .tasks-item div:last-child button,
+body.dark button {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+body.dark .tasks-item div:last-child button:last-child {
+  background-color: #b52a36;
+}
+
+body.dark .tasks-item div:last-child button:last-child:hover {
+  background-color: #8a1f27;
+}
+
+body.dark .tasks-item div:last-child button:hover,
+body.dark button:hover {
+  background-color: #003f7f;
+}
+
+/* Input fields */
+input {
+  padding: 8px;
+  border-radius: 6px;
+  width: 80%;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body.dark input {
+  background: #3a3a3a;
+  border-color: #555;
+  color: #f1f1f1;
+}
+
+/* Add button */
+.add-button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin-left: 8px;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.light .add-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+body.light .add-button:hover {
+  background-color: #0056b3;
+}
+
+body.dark .add-button {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+body.dark .add-button:hover {
+  background-color: #003f7f;
 }

@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Spinner from "../components/Spinner";
 import Error from "../components/Error";
 import { data } from "react-router-dom";
+import { addProfileApi } from "../services/api";
+import { AuthContext } from "../context/AuthContext";
 
 export default function ProfilesPage() {
   const { profiles, setProfiles, error, setError, loading, setLoading } =
@@ -16,6 +18,7 @@ export default function ProfilesPage() {
   const searchInputRef = useRef("");
   const [search, setSearch] = useState("");
   const { showNotification } = useContext(NotificationContext);
+  const { token } = useContext(AuthContext);
 
   const filteredProfiles = useMemo(() => {
     return profiles.filter((profile) =>
@@ -30,22 +33,17 @@ export default function ProfilesPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:5000/profiles`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        const message = data.errors
-          ? data.errors[0].msg
+      const newProfile = await addProfileApi(token, name);
+      if (!newProfile.res.ok) {
+        const message = newProfile.data.errors
+          ? newProfile.data.errors[0].msg
           : "Something went wrong";
         const err = new Error(message);
-        err.response = data;
+        err.response = newProfile.data;
         throw err;
       }
       setProfiles((prevProfiles) => {
-        return [...prevProfiles, newProfile];
+        return [...prevProfiles, newProfile.data];
       });
       showNotification("Profile added successfully!", "success");
 
@@ -66,6 +64,10 @@ export default function ProfilesPage() {
       try {
         await fetch(`http://localhost:5000/profiles/${id}`, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
 
         setProfiles((prevProfiles) =>

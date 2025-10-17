@@ -9,14 +9,16 @@
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background-color: var(--card-bg);
+  color: var(--text-color);
   text-align: center;
-  transition: background 0.3s, color 0.3s;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 /* Heading */
 .settings-page h2 {
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
+  transition: color 0.3s;
 }
 
 /* Theme Toggle Section */
@@ -31,6 +33,7 @@
 .theme-toggle p {
   font-size: 1rem;
   color: var(--text-color);
+  transition: color 0.3s;
 }
 
 /* Toggle Button */

@@ -1,42 +1,71 @@
-/* === Main Container === */
+/* Main Container */
 .profiles-container {
   max-width: 800px;
   margin: 40px auto;
   padding: 24px 32px;
-  background-color: #f9f9f9;
   border-radius: 16px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   font-family: "Inter", sans-serif;
-  color: #333;
+  transition: background 0.3s, color 0.3s, border 0.3s, box-shadow 0.3s;
 }
 
-/* === Heading === */
+/* Light Theme */
+body.light .profiles-container {
+  background-color: #f9f9f9;
+  color: #333;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* Dark Theme */
+body.dark .profiles-container {
+  background-color: #2b2b2b;
+  color: #f1f1f1;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.05);
+  border: 1px solid #444;
+}
+
+/* Heading */
 .profiles-container h1 {
   text-align: center;
   font-size: 1.9rem;
   font-weight: 600;
-  color: #222;
   margin-bottom: 24px;
+  transition: color 0.3s;
 }
 
-/* === Search Input === */
+body.dark .profiles-container h1 {
+  color: #f1f1f1;
+}
+
+/* Search Input */
 .profiles-container input[type="text"] {
   width: 100%;
   padding: 10px 14px;
-  border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
   margin-bottom: 20px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+}
+
+/* Light Theme Inputs */
+body.light .profiles-container input[type="text"] {
+  background: #fff;
+  border: 1px solid #ccc;
+  color: #222;
+}
+
+/* Dark Theme Inputs */
+body.dark .profiles-container input[type="text"] {
+  background: #3a3a3a;
+  border: 1px solid #555;
+  color: #f1f1f1;
 }
 
 .profiles-container input[type="text"]:focus {
-  border-color: #007bff;
   outline: none;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
 }
 
-/* === Profile Form === */
+/* Profile Form */
 .profile-form {
   display: flex;
   gap: 10px;
@@ -44,61 +73,80 @@
   align-items: center;
 }
 
-/* Input and Button are visually same height */
 .profile-form input {
   flex: 1;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-.profile-form input:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
+/* Form Buttons */
 .profile-form button {
-  height: 40px; /* ✅ Match input height */
-  padding: 0 18px; /* ✅ Remove extra vertical padding */
-  background: #007bff;
-  color: #fff;
-  border: none;
+  height: 40px;
+  padding: 0 18px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
   font-size: 1rem;
-  transition: background 0.2s ease, transform 0.1s ease;
-  align-self: self-start;
+  transition: background 0.3s ease, transform 0.1s ease;
 }
 
-.profile-form button:hover {
+/* Light Theme Buttons */
+body.light .profile-form button {
+  background: #007bff;
+  color: #fff;
+}
+
+body.light .profile-form button:hover {
   background: #0056b3;
+}
+
+/* Dark Theme Buttons */
+body.dark .profile-form button {
+  background: #0056b3;
+  color: #fff;
+}
+
+body.dark .profile-form button:hover {
+  background: #003f7f;
 }
 
 .profile-form button:active {
   transform: scale(0.98);
 }
 
-/* === Profiles Grid === */
+/* Profiles Grid */
 .profiles-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
 }
 
-/* === Profile Card === */
+/* Profile Card */
 .profile-card {
-  background: #fafafa;
-  border: 1px solid #eee;
   border-radius: 12px;
   padding: 16px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
 }
+
+/* Light Theme Card */
+body.light .profile-card {
+  background: #fafafa;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Dark Theme Card */
+body.dark .profile-card {
+  background: #3a3a3a;
+  border: 1px solid #555;
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
+  color: #f1f1f1;
+}
+
 .profile-card img {
   width: 100px;
   height: 100px;
@@ -111,13 +159,19 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
+/* Profile Text */
 .profile-card p {
   font-size: 1.1rem;
   font-weight: 500;
-  color: #222;
   margin-bottom: 12px;
+  transition: color 0.3s;
 }
 
+body.dark .profile-card p {
+  color: #f1f1f1;
+}
+
+/* Buttons */
 .profile-buttons {
   display: flex;
   justify-content: center;
@@ -125,29 +179,50 @@
 }
 
 .delete-button {
-  background: #dc3545;
-  color: #fff;
-  border: none;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 500;
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition: background 0.3s ease, transform 0.1s ease;
 }
 
-.delete-button:hover {
+/* Light Theme Delete Button */
+body.light .delete-button {
+  background: #dc3545;
+  color: #fff;
+}
+
+body.light .delete-button:hover {
   background: #b02a37;
+}
+
+/* Dark Theme Delete Button */
+body.dark .delete-button {
+  background: #b02a36;
+  color: #fff;
+}
+
+body.dark .delete-button:hover {
+  background: #8a1f27;
 }
 
 .delete-button:active {
   transform: scale(0.97);
 }
 
-/* === Empty State === */
+/* Empty State */
 .empty-message {
   text-align: center;
-  color: #777;
   margin-top: 30px;
   font-style: italic;
+  transition: color 0.3s;
+}
+
+body.light .empty-message {
+  color: #777;
+}
+
+body.dark .empty-message {
+  color: #ccc;
 }

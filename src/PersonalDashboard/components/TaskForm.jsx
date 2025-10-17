@@ -14,6 +14,7 @@ export default function TaskForm({ handleAddTask, title, setTitle }) {
     <motion.div
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
+      className="task-form"
     >
       <input
         type="text"

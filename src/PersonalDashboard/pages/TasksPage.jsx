@@ -5,12 +5,11 @@ import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
 import Spinner from "../components/Spinner";
 import Error from "../components/Error";
-
 import { Outlet } from "react-router-dom";
 import "../styles/TaskPage.css";
 import "../styles/Notification.css";
 import { motion } from "framer-motion";
-import { validateProfile } from "../../../server/validators/validateProfile";
+import { AuthContext } from "../context/AuthContext";
 
 export default function TasksPage() {
   const [title, setTitle] = useState("");
@@ -19,7 +18,7 @@ export default function TasksPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const searchInputRef = useRef("");
   const { showNotification } = useContext(NotificationContext);
-
+  const { token } = useContext(AuthContext);
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) =>
       task.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -34,7 +33,10 @@ export default function TasksPage() {
     try {
       const res = await fetch("http://localhost:5000/tasks", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ title }),
       });
 
@@ -44,7 +46,6 @@ export default function TasksPage() {
         const message =
           data?.errors?.[0]?.msg || data?.message || "Something went wrong";
 
-        // Attach the entire backend response for debugging
         const err = new Error(message);
         err.response = data;
         throw err;
@@ -72,7 +73,10 @@ export default function TasksPage() {
 
         await fetch(`http://localhost:5000/tasks/${id}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify(updated),
         });
 
@@ -92,7 +96,12 @@ export default function TasksPage() {
       setLoading(true);
       setError(null);
       try {
-        await fetch(`http://localhost:5000/tasks/${id}`, { method: "DELETE" });
+        await fetch(`http://localhost:5000/tasks/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         dispatch({ type: "DELETE_TASK", payload: id });
         showNotification("Task deleted!", "error");
       } catch (error) {

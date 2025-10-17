@@ -1,7 +1,8 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
+import "../styles/Register.css";
+import Error from "../components/Error";
 export default function Register() {
   const { register } = useContext(AuthContext);
   const [name, setName] = useState("");
@@ -44,9 +45,15 @@ export default function Register() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+
+        {error && <Error error={error} />}
+
         <button type="submit">Register</button>
       </form>
-      {error && <p>{error}</p>}
+      <span>If you are already registered : </span>
+      <Link to="/login" style={{ fontSize: "18px" }}>
+        Login
+      </Link>
     </div>
   );
 }

@@ -1,4 +1,11 @@
-import { useReducer, createContext, useEffect, useState } from "react";
+import {
+  useReducer,
+  createContext,
+  useEffect,
+  useState,
+  useContext,
+} from "react";
+import { AuthContext } from "./AuthContext";
 
 export const TaskContext = createContext();
 
@@ -25,13 +32,21 @@ export default function TaskProvider({ children }) {
   const [tasks, dispatch] = useReducer(taskReducer, initialTasks);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:5000/tasks");
+        const res = await fetch("http://localhost:5000/tasks", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
         const data = await res.json();
+
         dispatch({ type: "SET_TASKS", payload: data });
       } catch (err) {
         console.error("Error fetching tasks:", err);
@@ -40,9 +55,8 @@ export default function TaskProvider({ children }) {
         setLoading(false);
       }
     };
-
-    fetchTasks();
-  }, []);
+    if (token) fetchTasks();
+  }, [token]);
 
   const value = { tasks, dispatch, loading, error, setError, setLoading };
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;

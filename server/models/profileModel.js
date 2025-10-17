@@ -16,7 +16,7 @@ export const addProfile = (name) => {
       [name],
       (err, results) => {
         if (err) return reject(err);
-        resolve({ id: results.insertId, name, completed: false });
+        resolve({ id: results.insertId, name });
       }
     );
   });

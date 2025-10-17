@@ -1,4 +1,6 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { AuthContext } from "./AuthContext";
+import { getAllProfilesApi } from "../services/api";
 
 export const ProfileContext = createContext();
 
@@ -8,14 +10,14 @@ export default function ProfileProvider({ children }) {
   const [profiles, setProfiles] = useState(initialProfiles);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { token } = useContext(AuthContext);
+
   useEffect(() => {
     const fetchProfiles = async () => {
       setError(null);
       setLoading(true);
       try {
-        const res = await fetch("http://localhost:5000/profiles");
-
-        const data = await res.json();
+        const data = await getAllProfilesApi(token);
         setProfiles(data);
       } catch (err) {
         console.error("Error fetching tasks:", err);
@@ -24,8 +26,8 @@ export default function ProfileProvider({ children }) {
         setLoading(false);
       }
     };
-    fetchProfiles();
-  }, []);
+    if (token) fetchProfiles();
+  }, [token]);
 
   return (
     <ProfileContext.Provider

@@ -27,7 +27,7 @@ export const removeProfile = async (req, res, next) => {
   try {
     const { id } = req.params;
     await deleteProfile(id);
-    res.json({ message: "Task deleted successfully" });
+    res.json({ message: "Profile deleted successfully" });
   } catch (error) {
     next(error);
   }

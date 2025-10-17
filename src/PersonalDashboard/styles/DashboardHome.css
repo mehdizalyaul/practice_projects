@@ -2,25 +2,51 @@
   max-width: 600px;
   margin: 40px auto;
   padding: 20px 30px;
-  background-color: #f7f9fc;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
-.dashboard-container h2 {
+/* Light Theme */
+body.light .dashboard-container {
+  background-color: #f7f9fc;
   color: #333;
-  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Dark Theme */
+body.dark .dashboard-container {
+  background-color: #2b2b2b;
+  color: #f1f1f1;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+}
+
+/* Heading */
+.dashboard-container h2 {
+  margin-bottom: 16px;
+  transition: color 0.3s;
+}
+
+body.dark .dashboard-container h2 {
+  color: #f1f1f1;
+}
+
+/* Paragraphs */
 .dashboard-container p {
   font-size: 18px;
-  color: #555;
   margin: 10px 0;
+  transition: color 0.3s;
 }
 
-.dashboard-container p span {
-  font-weight: bold;
+/* Light theme paragraph spans */
+body.light .dashboard-container p span {
   color: #007bff;
+  font-weight: bold;
+}
+
+/* Dark theme paragraph spans */
+body.dark .dashboard-container p span {
+  color: #3399ff;
+  font-weight: bold;
 }
