@@ -1,14 +1,9 @@
-import {
-  getAllTasks,
-  addTask,
-  toggleTask,
-  deleteTask,
-} from "../models/taskModel.js";
+import * as Task from "../models/taskModel.js";
 
 // Get all tasks
 export const fetchTasks = async (req, res, next) => {
   try {
-    const tasks = await getAllTasks();
+    const tasks = await Task.getAll();
     res.json(tasks);
   } catch (err) {
     next(error);
@@ -21,7 +16,7 @@ export const createTask = async (req, res, next) => {
     const { title } = req.body;
     if (!title) return res.status(400).json({ error: "Title is required" });
 
-    const newTask = await addTask(title);
+    const newTask = await Task.add(title);
     res.status(201).json(newTask);
   } catch (err) {
     next(error);
@@ -32,7 +27,7 @@ export const createTask = async (req, res, next) => {
 export const updateTask = async (req, res, next) => {
   try {
     const { id } = req.params;
-    await toggleTask(id);
+    await Task.toggle(id);
     res.json({ message: "Task updated successfully" });
   } catch (err) {
     next(error);
@@ -43,7 +38,7 @@ export const updateTask = async (req, res, next) => {
 export const removeTask = async (req, res, next) => {
   try {
     const { id } = req.params;
-    await deleteTask(id);
+    await Task.deleteOne(id);
     res.json({ message: "Task deleted successfully" });
   } catch (err) {
     next(error);

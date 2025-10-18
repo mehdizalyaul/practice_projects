@@ -1,7 +1,7 @@
 import db from "../db.js";
 
 // Get all tasks
-export const getAllTasks = () => {
+export const getAll = () => {
   return new Promise((resolve, reject) => {
     db.query("SELECT * FROM tasks", (err, results) => {
       if (err) return reject(err);
@@ -11,7 +11,7 @@ export const getAllTasks = () => {
 };
 
 // Add new task
-export const addTask = (title) => {
+export const add = (title) => {
   return new Promise((resolve, reject) => {
     db.query(
       "INSERT INTO tasks (title, completed) VALUES (?, ?)",
@@ -25,7 +25,7 @@ export const addTask = (title) => {
 };
 
 // Update (toggle completed)
-export const toggleTask = (id) => {
+export const toggle = (id) => {
   return new Promise((resolve, reject) => {
     db.query(
       "UPDATE tasks SET completed = NOT completed WHERE id = ?",
@@ -39,7 +39,7 @@ export const toggleTask = (id) => {
 };
 
 // Delete task
-export const deleteTask = (id) => {
+export const deleteOne = (id) => {
   return new Promise((resolve, reject) => {
     db.query("DELETE FROM tasks WHERE id = ?", [id], (err, results) => {
       if (err) return reject(err);

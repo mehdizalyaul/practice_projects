@@ -1,31 +1,37 @@
 import db from "../db.js";
 
-export const getAllProfiles = () => {
+export const getAll = () => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM profiles", (err, results) => {
-      if (err) return reject(err);
+    db.query("SELECT * FROM profiles", (error, results) => {
+      if (error) return reject(error);
       resolve(results);
     });
   });
 };
 
-export const addProfile = (name) => {
+export const create = (name) => {
   return new Promise((resolve, reject) => {
     db.query(
       "INSERT INTO profiles (name) VALUES ( ? )",
       [name],
-      (err, results) => {
-        if (err) return reject(err);
+      (error, results) => {
+        if (error) {
+          return reject(error);
+        }
+
         resolve({ id: results.insertId, name });
       }
     );
   });
 };
 
-export const deleteProfile = (id) => {
+export const deleteOne = (id) => {
   return new Promise((resolve, reject) => {
-    db.query("DELETE FROM profiles WHERE id = ?", [id], (err, results) => {
-      if (err) return reject(err);
+    db.query("DELETE FROM profiles WHERE id = ?", [id], (error, results) => {
+      if (error) {
+        return reject(error);
+      }
+
       resolve(results);
     });
   });

@@ -1,6 +1,6 @@
 import db from "../db.js";
 
-export const createUser = (name, email, passwordHash) => {
+export const create = (name, email, passwordHash) => {
   return new Promise((resolve, reject) => {
     db.query(
       "INSERT INTO users (username, email, password_hash) VALUES ( ? , ? , ? )",
@@ -13,7 +13,7 @@ export const createUser = (name, email, passwordHash) => {
   });
 };
 
-export const findUserByEmail = (email) => {
+export const findByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query("SELECT * FROM users WHERE email = ?", [email], (err, results) => {
       if (err) return reject(err);
