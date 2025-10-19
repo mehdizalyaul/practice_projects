@@ -9,7 +9,7 @@ export default function ThemeProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem("theme", JSON.stringify(theme));
-    document.body.className = ""; // clear existing classes
+    document.body.classList.remove(theme === "dark" ? "light" : "dark");
     document.body.classList.add(theme);
   }, [theme]);
 

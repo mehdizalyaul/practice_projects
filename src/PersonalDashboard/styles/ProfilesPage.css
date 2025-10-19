@@ -69,7 +69,6 @@ body.dark .profiles-container input[type="text"] {
 .profile-form {
   display: flex;
   gap: 10px;
-  margin-bottom: 30px;
   align-items: center;
 }
 

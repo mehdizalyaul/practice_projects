@@ -5,6 +5,11 @@
   font-family: "Montserrat", sans-serif;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 button {
   cursor: pointer;
   border: none;

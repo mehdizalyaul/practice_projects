@@ -8,9 +8,10 @@ import Login from "./PersonalDashboard/pages/Login";
 import Register from "./PersonalDashboard/pages/Register";
 import Navbar from "./PersonalDashboard/components/Navbar";
 import TaskDetails from "./PersonalDashboard/pages/TaskDetails";
+import Notification from "./PersonalDashboard/components/Notification";
 
 import "./PersonalDashboard/styles/global.css";
-import Notification from "./PersonalDashboard/components/Notification";
+
 export default function App() {
   return (
     <div>

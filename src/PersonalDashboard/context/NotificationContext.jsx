@@ -12,6 +12,7 @@ export default function NotificationProvider({ children }) {
       setNotification(null);
     }, 3000);
   };
+
   return (
     <NotificationContext.Provider value={{ notification, showNotification }}>
       {children}

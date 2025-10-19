@@ -8,7 +8,7 @@ import { verifyToken } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.use("/api/auth", authRoute);
-router.use("/tasks", verifyToken, tasksRoute);
-router.use("/profiles", verifyToken, profileRoute);
+router.use("/api/tasks", verifyToken, tasksRoute);
+router.use("/api/profiles", verifyToken, profileRoute);
 
 export default router;

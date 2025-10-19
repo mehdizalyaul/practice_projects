@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
-import { getAllProfilesApi } from "../services/api";
+import * as ProfileApi from "../services/index";
 
 export const ProfileContext = createContext();
 
@@ -17,7 +17,7 @@ export default function ProfileProvider({ children }) {
       setError(null);
       setLoading(true);
       try {
-        const data = await getAllProfilesApi(token);
+        const data = await ProfileApi.getAllProfiles(token);
         setProfiles(data);
       } catch (err) {
         console.error("Error fetching tasks:", err);

@@ -10,7 +10,7 @@ import "../styles/TaskPage.css";
 import "../styles/Notification.css";
 import { motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
-
+import * as TaskApi from "../services/index";
 export default function TasksPage() {
   const [title, setTitle] = useState("");
   const { tasks, dispatch, error, setError, loading, setLoading } =
@@ -19,6 +19,7 @@ export default function TasksPage() {
   const searchInputRef = useRef("");
   const { showNotification } = useContext(NotificationContext);
   const { token } = useContext(AuthContext);
+
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) =>
       task.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -31,32 +32,17 @@ export default function TasksPage() {
     setError(null);
 
     try {
-      const res = await fetch("http://localhost:5000/tasks", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        const message =
-          data?.errors?.[0]?.msg || data?.message || "Something went wrong";
-
-        const err = new Error(message);
-        err.response = data;
-        throw err;
-      }
+      const data = await TaskApi.createTask(token, title);
 
       dispatch({ type: "ADD_TASK", payload: data });
+
       showNotification("Task added successfully!", "success");
+
       setTitle("");
     } catch (error) {
-      console.error("Caught error:", error);
-      setError(error.response.errors[0].msg || "Unexpected error occurred");
+      console.error("Caught error:", error.response);
+
+      setError(error.response || "Unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -67,18 +53,7 @@ export default function TasksPage() {
       setLoading(true);
       setError(null);
       try {
-        const task = tasks.find((t) => t.id === id);
-
-        const updated = { ...task, completed: !task.completed };
-
-        await fetch(`http://localhost:5000/tasks/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updated),
-        });
+        await TaskApi.updateTaskStatus(token, id);
 
         dispatch({ type: "TOGGLE_TASK", payload: id });
         showNotification("Task status updated!", "info");
@@ -96,12 +71,8 @@ export default function TasksPage() {
       setLoading(true);
       setError(null);
       try {
-        await fetch(`http://localhost:5000/tasks/${id}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await TaskApi.deleteTask(token, id);
+
         dispatch({ type: "DELETE_TASK", payload: id });
         showNotification("Task deleted!", "error");
       } catch (error) {

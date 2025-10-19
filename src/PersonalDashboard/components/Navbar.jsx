@@ -5,8 +5,9 @@ import { ThemeContext } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Navbar() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { toggleTheme } = useContext(ThemeContext);
   const { logout } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
   return (
     <nav>
       <div>
@@ -16,9 +17,11 @@ export default function Navbar() {
         <NavLink to="/tasks">Tasks</NavLink>
         <NavLink to="/profiles">Profiles</NavLink>
         <NavLink to="/settings">Settings</NavLink>
-        <NavLink to="/login" onClick={logout}>
-          Logout
-        </NavLink>
+        {isAuthenticated && (
+          <NavLink to="/login" onClick={logout}>
+            Logout
+          </NavLink>
+        )}
       </div>
       <div>
         <input

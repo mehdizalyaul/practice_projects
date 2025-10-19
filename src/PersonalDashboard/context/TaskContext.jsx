@@ -6,7 +6,7 @@ import {
   useContext,
 } from "react";
 import { AuthContext } from "./AuthContext";
-
+import * as TaskApi from "../services/index";
 export const TaskContext = createContext();
 
 const initialTasks = [];
@@ -38,16 +38,9 @@ export default function TaskProvider({ children }) {
     const fetchTasks = async () => {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:5000/tasks", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await res.json();
+        const allTasks = await TaskApi.getAllTasks(token);
 
-        dispatch({ type: "SET_TASKS", payload: data });
+        dispatch({ type: "SET_TASKS", payload: allTasks });
       } catch (err) {
         console.error("Error fetching tasks:", err);
         setError(err);

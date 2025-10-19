@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import React from "react";
 import "../styles/ProfilesPage.css";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 function ProfileForm({ addProfile, name, setName }) {
   const inputRef = useRef();

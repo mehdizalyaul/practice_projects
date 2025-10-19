@@ -7,10 +7,8 @@ import { NotificationContext } from "../context/NotificationContext";
 import { motion, AnimatePresence } from "framer-motion";
 import Spinner from "../components/Spinner";
 import Error from "../components/Error";
-import { data } from "react-router-dom";
-import { addProfileApi } from "../services/api";
 import { AuthContext } from "../context/AuthContext";
-
+import * as ProfileApi from "../services/index";
 export default function ProfilesPage() {
   const { profiles, setProfiles, error, setError, loading, setLoading } =
     useContext(ProfileContext);
@@ -33,28 +31,21 @@ export default function ProfilesPage() {
     setLoading(true);
 
     try {
-      const newProfile = await addProfileApi(token, name);
-      if (!newProfile.res.ok) {
-        const message = newProfile.data.errors
-          ? newProfile.data.errors[0].msg
-          : "Something went wrong";
-        const err = new Error(message);
-        err.response = newProfile.data;
-        throw err;
-      }
-      setProfiles((prevProfiles) => {
-        return [...prevProfiles, newProfile.data];
-      });
+      const newProfile = await ProfileApi.addProfile(token, name);
+
+      setProfiles((prevProfiles) => [...prevProfiles, newProfile]);
+
       showNotification("Profile added successfully!", "success");
 
       setName("");
     } catch (error) {
-      console.error("Fail to fetch add profile", error);
-      setError(error.response.errors[0].msg);
+      console.error("Fail to fetch add profile:", error.message);
+
+      setError(error.message);
     } finally {
       setLoading(false);
     }
-  }, [name, showNotification]);
+  }, [name, token, showNotification]);
 
   const deleteProfile = useCallback(
     async (id) => {
@@ -62,13 +53,7 @@ export default function ProfilesPage() {
       setLoading(true);
 
       try {
-        await fetch(`http://localhost:5000/profiles/${id}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        await ProfileApi.deleteProfile(token, id);
 
         setProfiles((prevProfiles) =>
           prevProfiles.filter((profile) => profile.id !== id)
@@ -84,7 +69,9 @@ export default function ProfilesPage() {
     [showNotification]
   );
 
-  if (loading) return <Spinner />;
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <AnimatePresence>

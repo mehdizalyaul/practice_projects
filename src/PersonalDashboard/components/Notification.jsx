@@ -5,7 +5,9 @@ import "../styles/Notification.css";
 const Notification = () => {
   const { notification } = useContext(NotificationContext);
 
-  if (!notification) return null;
+  if (!notification) {
+    return null;
+  }
 
   return (
     <div className={`notification ${notification.type}`}>

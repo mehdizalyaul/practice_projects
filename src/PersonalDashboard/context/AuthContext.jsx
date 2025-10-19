@@ -1,13 +1,15 @@
+import * as AuthApi from "../services/index";
 import { createContext, useState } from "react";
-import { loginUser, registerUser } from "../services/api";
+
 export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   //const [user, setUser] = useState(null);
   const isAuthenticated = !!token;
+
   const login = async (email, password) => {
-    const res = await loginUser(email, password);
+    const res = await AuthApi.login(email, password);
 
     if (res.token) {
       setToken(res.token);
@@ -20,7 +22,7 @@ export default function AuthProvider({ children }) {
   };
 
   const register = async (name, email, password) => {
-    const res = await registerUser(name, email, password);
+    const res = await AuthApi.register(name, email, password);
 
     if (res.token) {
       localStorage.setItem("token", res.token);

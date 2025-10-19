@@ -1,6 +1,8 @@
+const BACKEND_URL = "http://localhost:5000/api";
+
 export const getAllTasks = async (token) => {
   try {
-    const res = await fetch("http://localhost:5000/tasks", {
+    const res = await fetch(`${BACKEND_URL}/tasks`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -19,7 +21,7 @@ export const getAllTasks = async (token) => {
 
 export const updateTaskStatus = async (token, id) => {
   try {
-    const res = await fetch(`http://localhost:5000/tasks/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/tasks/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +42,7 @@ export const updateTaskStatus = async (token, id) => {
 
 export const deleteTask = async (token, id) => {
   try {
-    const res = await fetch(`http://localhost:5000/tasks/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/tasks/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -69,15 +71,13 @@ export const createTask = async (token, title) => {
   });
 
   const data = await res.json();
-
+  console.log(data.message[0].msg);
   if (!res.ok) {
     // Extract a clean error message
-    const message =
-      data?.errors?.[0]?.msg || data?.message || "Something went wrong";
-
+    const message = data?.message[0]?.msg || "Something went wrong";
     // Create and throw a proper error object
     const err = new Error(message);
-    err.response = data;
+    err.response = message;
     throw err;
   }
 
