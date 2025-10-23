@@ -18,9 +18,12 @@ export default function Navbar() {
         <NavLink to="/profiles">Profiles</NavLink>
         <NavLink to="/settings">Settings</NavLink>
         {isAuthenticated && (
-          <NavLink to="/login" onClick={logout}>
-            Logout
-          </NavLink>
+          <>
+            <NavLink to="/tasks/mine">MyTasks</NavLink>
+            <NavLink to="/login" onClick={logout}>
+              Logout
+            </NavLink>
+          </>
         )}
       </div>
       <div>

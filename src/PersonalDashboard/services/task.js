@@ -19,6 +19,25 @@ export const getAllTasks = async (token) => {
   }
 };
 
+export const getTasksById = async (token, id) => {
+  try {
+    const res = await fetch(`${BACKEND_URL}/tasks/user/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!res.ok) {
+      throw new Error(res.message);
+    }
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const updateTaskStatus = async (token, id) => {
   try {
     const res = await fetch(`${BACKEND_URL}/tasks/${id}`, {
@@ -71,16 +90,18 @@ export const createTask = async (token, title) => {
   });
 
   const data = await res.json();
-  console.log(data.message[0].msg);
   if (!res.ok) {
-    // Extract a clean error message
-    const message = data?.message[0]?.msg || "Something went wrong";
-    // Create and throw a proper error object
+    console.log("Yes error");
+
+    // handle both array and string cases
+    const message = Array.isArray(data?.message)
+      ? data.message[0]?.msg
+      : data?.message || "Something went wrong";
+
     const err = new Error(message);
     err.response = message;
     throw err;
   }
 
-  // If request succeeded
   return data;
 };

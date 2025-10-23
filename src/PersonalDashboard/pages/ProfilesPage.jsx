@@ -8,7 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Spinner from "../components/Spinner";
 import Error from "../components/Error";
 import { AuthContext } from "../context/AuthContext";
-import * as ProfileApi from "../services/index";
+import { ProfileApi } from "../services/index";
+
 export default function ProfilesPage() {
   const { profiles, setProfiles, error, setError, loading, setLoading } =
     useContext(ProfileContext);

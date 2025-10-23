@@ -9,6 +9,7 @@ import Register from "./PersonalDashboard/pages/Register";
 import Navbar from "./PersonalDashboard/components/Navbar";
 import TaskDetails from "./PersonalDashboard/pages/TaskDetails";
 import Notification from "./PersonalDashboard/components/Notification";
+import MyTasks from "./PersonalDashboard/pages/MyTasks";
 
 import "./PersonalDashboard/styles/global.css";
 
@@ -30,6 +31,7 @@ export default function App() {
           </Route>
           <Route path="/profiles" element={<ProfilesPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/tasks/mine" element={<MyTasks />} />
         </Route>
       </Routes>
       <Notification />

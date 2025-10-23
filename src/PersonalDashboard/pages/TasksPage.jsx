@@ -10,7 +10,7 @@ import "../styles/TaskPage.css";
 import "../styles/Notification.css";
 import { motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
-import * as TaskApi from "../services/index";
+import { TaskApi } from "../services/index";
 export default function TasksPage() {
   const [title, setTitle] = useState("");
   const { tasks, dispatch, error, setError, loading, setLoading } =
@@ -33,13 +33,14 @@ export default function TasksPage() {
 
     try {
       const data = await TaskApi.createTask(token, title);
-
+      console.log(data);
       dispatch({ type: "ADD_TASK", payload: data });
 
       showNotification("Task added successfully!", "success");
 
       setTitle("");
     } catch (error) {
+      console.log(error.response);
       console.error("Caught error:", error.response);
 
       setError(error.response || "Unexpected error occurred");

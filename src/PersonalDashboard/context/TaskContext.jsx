@@ -6,7 +6,7 @@ import {
   useContext,
 } from "react";
 import { AuthContext } from "./AuthContext";
-import * as TaskApi from "../services/index";
+import { TaskApi } from "../services/index";
 export const TaskContext = createContext();
 
 const initialTasks = [];
