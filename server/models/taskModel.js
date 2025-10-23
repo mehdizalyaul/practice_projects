@@ -11,14 +11,14 @@ export const getAll = () => {
 };
 
 // Add new task
-export const add = (title) => {
+export const add = (title, userId) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO tasks (title, completed) VALUES (?, ?)",
-      [title, false],
+      "INSERT INTO tasks (title, completed, user_id) VALUES (?, ?, ?)",
+      [title, false, userId],
       (err, results) => {
         if (err) return reject(err);
-        resolve({ id: results.insertId, title, completed: false });
+        resolve({ id: results.insertId, title, completed: false, userId });
       }
     );
   });
@@ -43,6 +43,19 @@ export const deleteOne = (id) => {
   return new Promise((resolve, reject) => {
     db.query("DELETE FROM tasks WHERE id = ?", [id], (err, results) => {
       if (err) return reject(err);
+      resolve(results);
+    });
+  });
+};
+
+// GET A USER BY ID
+export const getTasksById = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM tasks WHERE user_id = ? ";
+    db.query(sql, [id], (error, results) => {
+      if (error) {
+        reject(error);
+      }
       resolve(results);
     });
   });

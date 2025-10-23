@@ -28,7 +28,7 @@ export const register = async (req, res) => {
     //  Generate JWT
     const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: EXPIRES_IN });
 
-    res.json({ message: "User registered successfully", token });
+    res.status(201).json({ userId, token });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
@@ -56,7 +56,7 @@ export const login = async (req, res) => {
       expiresIn: EXPIRES_IN,
     });
 
-    res.json({ message: "Login successful", token });
+    res.status(200).json({ userId: user.id, token });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
