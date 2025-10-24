@@ -12,7 +12,6 @@ if (!JWT_SECRET) {
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-
     // Check if email already exists
     const isExist = await User.findByEmail(email);
     if (isExist) {
@@ -21,14 +20,16 @@ export const register = async (req, res) => {
 
     // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
-
+    const role = "user";
     // Create user
-    const userId = await User.create(name, email, passwordHash);
+    const userId = await User.create(name, email, passwordHash, role);
 
     //  Generate JWT
-    const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: EXPIRES_IN });
+    const token = jwt.sign({ userId, role }, JWT_SECRET, {
+      expiresIn: EXPIRES_IN,
+    });
 
-    res.status(201).json({ userId, token });
+    res.status(201).json({ token });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
@@ -52,11 +53,11 @@ export const login = async (req, res) => {
     }
 
     //  Generate token
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
       expiresIn: EXPIRES_IN,
     });
 
-    res.status(200).json({ userId: user.id, token });
+    res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

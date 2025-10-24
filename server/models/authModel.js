@@ -1,10 +1,10 @@
 import db from "../db.js";
 
-export const create = (name, email, passwordHash) => {
+export const create = (name, email, passwordHash, role) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO users (username, email, password_hash) VALUES ( ? , ? , ? )",
-      [name, email, passwordHash],
+      "INSERT INTO users (username, email, password_hash,role) VALUES ( ? , ? , ? , ? )",
+      [name, email, passwordHash, role],
       (err, results) => {
         if (err) return reject(err);
         resolve(results.insertId);
