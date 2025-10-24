@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/ProfilesPage.css";
-import profileImage from "../../../public/profile.jpg";
+// import profileImage from "../../../public/profile.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 
 function ProfileCard({ profile, deleteProfile }) {
@@ -11,7 +11,7 @@ function ProfileCard({ profile, deleteProfile }) {
         animate={{ opacity: 1, y: 0 }}
         className="profile-card"
       >
-        <img src={profileImage} alt="" />
+        <img src={"profile.png"} alt="" />
 
         <p>{profile.name}</p>
         <div className="profile-buttons">

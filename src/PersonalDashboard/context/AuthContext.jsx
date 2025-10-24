@@ -1,46 +1,48 @@
 import { AuthApi } from "../services/index";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState, useMemo } from "react";
+import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const [user, setUser] = useState(localStorage.getItem("user") || null);
+
   const isAuthenticated = !!token;
+
+  // 🔹 useMemo ensures decoding happens only when token changes
+  const user = useMemo(() => {
+    if (!token) return { id: null, role: null };
+    try {
+      const decoded = jwtDecode(token);
+      return { id: decoded.userId, role: decoded.role };
+    } catch {
+      return { id: null, role: null };
+    }
+  }, [token]);
 
   const login = async (email, password) => {
     const res = await AuthApi.login(email, password);
-
     if (res.token) {
-      setToken(res.token);
       localStorage.setItem("token", res.token);
-      setUser(res.userId);
-      localStorage.setItem("user", res.userId);
-      return { success: true };
-    } else {
-      return { success: false, message: res.message };
+      setToken(res.token);
+      return { success: true, user };
     }
+    return { success: false, message: res.message };
   };
 
   const register = async (name, email, password) => {
     const res = await AuthApi.register(name, email, password);
-
     if (res.token) {
-      setToken(res.token);
       localStorage.setItem("token", res.token);
-      setUser(res.userId);
-      localStorage.setItem("user", res.userId);
+      setToken(res.token);
       return { success: true };
-    } else {
-      return { success: false, message: res.message };
     }
+    return { success: false, message: res.message };
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
     setToken(null);
-    setUser(null);
   };
 
   return (

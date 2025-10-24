@@ -18,6 +18,7 @@ export default function TaskList({ tasks, toggleTask, deleteTask }) {
             <div>
               <Link to={`/tasks/${task.id}`}>{task.title}</Link>
               <p>{task.completed ? "Completed" : "Incompleted"}</p>
+              <p>{task["user_id"]}</p>
             </div>
 
             <div>

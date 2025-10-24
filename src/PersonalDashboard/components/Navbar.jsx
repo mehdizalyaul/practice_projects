@@ -6,20 +6,24 @@ import { AuthContext } from "../context/AuthContext";
 
 export default function Navbar() {
   const { toggleTheme } = useContext(ThemeContext);
-  const { logout } = useContext(AuthContext);
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, logout, user } = useContext(AuthContext);
   return (
     <nav>
       <div>
-        <NavLink to="/" end>
-          Dashboard
-        </NavLink>
-        <NavLink to="/tasks">Tasks</NavLink>
-        <NavLink to="/profiles">Profiles</NavLink>
-        <NavLink to="/settings">Settings</NavLink>
+        {user.role === "admin" && (
+          <>
+            <NavLink to="/" end>
+              Dashboard
+            </NavLink>
+            <NavLink to="/tasks">Tasks</NavLink>
+            <NavLink to="/profiles">Profiles</NavLink>
+          </>
+        )}
+
         {isAuthenticated && (
           <>
             <NavLink to="/tasks/mine">MyTasks</NavLink>
+            <NavLink to="/settings">Settings</NavLink>
             <NavLink to="/login" onClick={logout}>
               Logout
             </NavLink>

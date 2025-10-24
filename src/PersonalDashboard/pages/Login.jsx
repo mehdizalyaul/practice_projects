@@ -15,8 +15,18 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await login(email, password);
-    if (res.success) navigate("/");
-    else setError(res.message);
+    if (res.success) {
+      if (res.user.role === "admin") {
+        console.log("admin");
+        navigate("/");
+      } else if (res.user.role === "user") {
+        console.log("user");
+
+        navigate("/tasks/mine");
+      }
+    } else {
+      setError(res.message);
+    }
   };
 
   return (
