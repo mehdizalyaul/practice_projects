@@ -1,0 +1,43 @@
+/* Input fields */
+input {
+  padding: 8px;
+  border-radius: 6px;
+  width: 80%;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body.dark input {
+  background: #3a3a3a;
+  border-color: #555;
+  color: #f1f1f1;
+}
+
+/* Add button */
+.add-button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin-left: 8px;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.light .add-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+body.light .add-button:hover {
+  background-color: #0056b3;
+}
+
+body.dark .add-button {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+body.dark .add-button:hover {
+  background-color: #003f7f;
+}

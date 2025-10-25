@@ -7,6 +7,10 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: sans-serif;
   transition: background 0.3s, color 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Light theme */
@@ -55,8 +59,13 @@ body.dark .tasks-container {
 .tasks-list {
   list-style: none;
   padding: 0;
-  margin: 20px auto;
-  max-width: 700px;
+  width: 80%;
+}
+
+.tasks-item_info {
+  max-width: 60%;
+}
+.tasks-item_buttons {
 }
 
 /* Task item */
@@ -69,6 +78,7 @@ body.dark .tasks-container {
   padding: 12px 20px;
   margin-bottom: 12px;
   transition: background-color 0.3s, transform 0.1s ease-in-out;
+  background-color: #a8df12;
 }
 
 /* Light theme task items */
@@ -174,49 +184,5 @@ body.dark .tasks-item div:last-child button:last-child:hover {
 
 body.dark .tasks-item div:last-child button:hover,
 body.dark button:hover {
-  background-color: #003f7f;
-}
-
-/* Input fields */
-input {
-  padding: 8px;
-  border-radius: 6px;
-  width: 80%;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  transition: background 0.3s, color 0.3s, border-color 0.3s;
-}
-
-body.dark input {
-  background: #3a3a3a;
-  border-color: #555;
-  color: #f1f1f1;
-}
-
-/* Add button */
-.add-button {
-  padding: 8px 14px;
-  border-radius: 6px;
-  margin-left: 8px;
-  cursor: pointer;
-  border: none;
-  transition: background 0.3s, color 0.3s;
-}
-
-body.light .add-button {
-  background-color: #007bff;
-  color: #fff;
-}
-
-body.light .add-button:hover {
-  background-color: #0056b3;
-}
-
-body.dark .add-button {
-  background-color: #0056b3;
-  color: #fff;
-}
-
-body.dark .add-button:hover {
   background-color: #003f7f;
 }

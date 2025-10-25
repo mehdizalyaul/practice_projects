@@ -15,13 +15,15 @@ export default function TaskList({ tasks, toggleTask, deleteTask }) {
             transition={{ duration: 1.3 }}
             className="tasks-item"
           >
-            <div>
+            <div className="tasks-item_info">
               <Link to={`/tasks/${task.id}`}>{task.title}</Link>
-              <p>{task.completed ? "Completed" : "Incompleted"}</p>
-              <p>{task["user_id"]}</p>
+              <p>{task.description}</p>
+              <p style={{ color: task.completed ? "green" : "red" }}>
+                {task.completed ? "Completed" : "Incompleted"}
+              </p>
             </div>
 
-            <div>
+            <div className="tasks-item_buttons">
               <button onClick={() => toggleTask(task.id)}>Toggle</button>
               <button onClick={() => deleteTask(task.id)}>Delete</button>
             </div>

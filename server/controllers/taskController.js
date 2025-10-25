@@ -13,11 +13,11 @@ export const fetchTasks = async (req, res, next) => {
 // Add task
 export const createTask = async (req, res, next) => {
   try {
-    const { title } = req.body;
+    const { title, description } = req.body;
     if (!title) return res.status(400).json({ error: "Title is required" });
     const userId = req.user.userId;
     if (!userId) return res.status(400).json({ error: "User is not found" });
-    const newTask = await Task.add(title, userId);
+    const newTask = await Task.add(title, description, userId);
     res.status(201).json(newTask);
   } catch (err) {
     next(error);
@@ -47,6 +47,7 @@ export const removeTask = async (req, res, next) => {
 };
 
 export const getTasksById = async (req, res, next) => {
+  console.log("getTasksById");
   try {
     const { id } = req.params;
     const tasks = await Task.getTasksById(id);

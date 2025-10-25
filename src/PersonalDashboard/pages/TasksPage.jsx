@@ -12,7 +12,6 @@ import { motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
 import { TaskApi } from "../services/index";
 export default function TasksPage() {
-  const [title, setTitle] = useState("");
   const { tasks, dispatch, error, setError, loading, setLoading } =
     useContext(TaskContext);
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,28 +25,29 @@ export default function TasksPage() {
     );
   }, [tasks, searchTerm]);
 
-  const handleAddTask = useCallback(async () => {
-    if (title.trim() === "") return;
-    setLoading(true);
-    setError(null);
+  const handleAddTask = useCallback(
+    async (title, description) => {
+      if (title.trim() === "") return;
+      setLoading(true);
+      setError(null);
 
-    try {
-      const data = await TaskApi.createTask(token, title);
-      console.log(data);
-      dispatch({ type: "ADD_TASK", payload: data });
+      try {
+        const data = await TaskApi.createTask(token, title, description);
+        console.log(data);
+        dispatch({ type: "ADD_TASK", payload: data });
 
-      showNotification("Task added successfully!", "success");
+        showNotification("Task added successfully!", "success");
+      } catch (error) {
+        console.log(error.response);
+        console.error("Caught error:", error.response);
 
-      setTitle("");
-    } catch (error) {
-      console.log(error.response);
-      console.error("Caught error:", error.response);
-
-      setError(error.response || "Unexpected error occurred");
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch, title, showNotification]);
+        setError(error.response || "Unexpected error occurred");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [dispatch, showNotification]
+  );
 
   const toggleTask = useCallback(
     async (id) => {
@@ -103,11 +103,7 @@ export default function TasksPage() {
         />
       </div>
 
-      <TaskForm
-        handleAddTask={handleAddTask}
-        title={title}
-        setTitle={setTitle}
-      />
+      <TaskForm handleAddTask={handleAddTask} />
       {error && <Error message={error} />}
 
       <TaskList

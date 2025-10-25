@@ -10,7 +10,7 @@ export default function ProfileProvider({ children }) {
   const [profiles, setProfiles] = useState(initialProfiles);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { token } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -26,7 +26,7 @@ export default function ProfileProvider({ children }) {
         setLoading(false);
       }
     };
-    if (token) fetchProfiles();
+    if (token && user.role === "admin") fetchProfiles();
   }, [token]);
 
   return (

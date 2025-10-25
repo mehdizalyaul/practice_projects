@@ -79,14 +79,14 @@ export const deleteTask = async (token, id) => {
   }
 };
 
-export const createTask = async (token, title) => {
+export const createTask = async (token, title, description) => {
   const res = await fetch(`${BACKEND_URL}/tasks`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ title }),
+    body: JSON.stringify({ title, description }),
   });
 
   const data = await res.json();

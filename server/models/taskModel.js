@@ -11,14 +11,20 @@ export const getAll = () => {
 };
 
 // Add new task
-export const add = (title, userId) => {
+export const add = (title, description, userId) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO tasks (title, completed, user_id) VALUES (?, ?, ?)",
-      [title, false, userId],
+      "INSERT INTO tasks (title, completed,description, user_id) VALUES (?, ? , ? , ?)",
+      [title, false, description, userId],
       (err, results) => {
         if (err) return reject(err);
-        resolve({ id: results.insertId, title, completed: false, userId });
+        resolve({
+          id: results.insertId,
+          title,
+          description,
+          completed: false,
+          userId,
+        });
       }
     );
   });
