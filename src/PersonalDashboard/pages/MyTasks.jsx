@@ -1,51 +1,49 @@
-import { useContext, useState, useCallback, useEffect } from "react";
+import { useContext, useState, useCallback, useEffect, useMemo } from "react";
 import { TaskContext } from "../context/TaskContext";
-import TaskList from "../components/TaskList";
-import Spinner from "../components/Spinner";
-import "../styles/TaskPage.css";
-import "../styles/Notification.css";
-import { motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
 import { TaskApi } from "../services/index";
+import TaskList from "../components/TaskList";
+import Spinner from "../components/Spinner";
 import NoTasks from "../components/NoTasks";
+import { motion } from "framer-motion";
+import "../styles/TaskPage.css";
+import "../styles/Notification.css";
 
 export default function MyTasks() {
-  const { loading, setLoading, error, setError, dispatch } =
-    useContext(TaskContext);
+  const { myTasks: tasks, dispatch } = useContext(TaskContext);
   const { user, logout, token } = useContext(AuthContext);
-  const [tasks, setTasks] = useState([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const res = await TaskApi.getTasksById(token, user);
-        setTasks(res.tasks);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-    fetchTasks();
-  }, [token, user]);
+  const [search, setSearch] = useState("");
 
-  console.log(tasks);
-  if (!user) {
+  if (!user || !token) {
     logout();
+    return;
   }
+
+  // ✅  Fix filter logic: must return the condition
+  const filteredTasks = useMemo(() => {
+    if (!search) return tasks;
+    return tasks.filter((task) =>
+      task.title.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [tasks, search]);
+  // ✅  toggleTask and deleteTask should include token and dispatch
   const toggleTask = useCallback(
     async (id) => {
       setLoading(true);
       setError(null);
       try {
         await TaskApi.updateTaskStatus(token, id);
-
         dispatch({ type: "TOGGLE_TASK", payload: id });
       } catch (error) {
-        setError(error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
     },
-    [dispatch, tasks]
+    [dispatch, token, setLoading, setError]
   );
 
   const deleteTask = useCallback(
@@ -54,7 +52,6 @@ export default function MyTasks() {
       setError(null);
       try {
         await TaskApi.deleteTask(token, id);
-
         dispatch({ type: "DELETE_TASK", payload: id });
       } catch (error) {
         setError(error.message);
@@ -62,10 +59,12 @@ export default function MyTasks() {
         setLoading(false);
       }
     },
-    [dispatch]
+    [dispatch, token, setLoading, setError]
   );
+
+  // ✅  Proper loading and error handling
   if (loading) return <Spinner />;
-  if (error) return <Error error={error} />;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <motion.div
@@ -74,10 +73,20 @@ export default function MyTasks() {
       transition={{ duration: 0.4 }}
       className="tasks-container"
     >
-      <h1>My Tasks Page</h1>
-      {tasks.length > 0 ? (
+      <h1>My Tasks</h1>
+
+      {filteredTasks.length > 0 && (
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      )}
+
+      {filteredTasks.length > 0 ? (
         <TaskList
-          tasks={tasks}
+          tasks={filteredTasks}
           toggleTask={toggleTask}
           deleteTask={deleteTask}
         />

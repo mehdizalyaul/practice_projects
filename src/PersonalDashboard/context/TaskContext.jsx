@@ -9,20 +9,46 @@ import { AuthContext } from "./AuthContext";
 import { TaskApi } from "../services/index";
 export const TaskContext = createContext();
 
-const initialTasks = [];
+const initialTasks = {
+  allTasks: [],
+  myTasks: [],
+  selectedTask: null,
+};
 
 const taskReducer = (state, action) => {
   switch (action.type) {
+    case "SET_MY_TASKS":
+      return { ...state, myTasks: action.payload };
+
     case "SET_TASKS":
-      return action.payload;
+      return { ...state, allTasks: action.payload };
+
     case "ADD_TASK":
-      return [...state, action.payload];
+      // Add to both allTasks (admin) and myTasks (if relevant)
+      return {
+        ...state,
+        allTasks: [...state.allTasks, action.payload],
+        myTasks: [...state.myTasks, action.payload],
+      };
+
     case "DELETE_TASK":
-      return state.filter((t) => t.id !== action.payload);
+      return {
+        ...state,
+        allTasks: state.allTasks.filter((t) => t.id !== action.payload),
+        myTasks: state.myTasks.filter((t) => t.id !== action.payload),
+      };
+
     case "TOGGLE_TASK":
-      return state.map((t) =>
-        t.id === action.payload ? { ...t, completed: !t.completed } : t
-      );
+      return {
+        ...state,
+        allTasks: state.allTasks.map((t) =>
+          t.id === action.payload ? { ...t, completed: !t.completed } : t
+        ),
+        myTasks: state.myTasks.map((t) =>
+          t.id === action.payload ? { ...t, completed: !t.completed } : t
+        ),
+      };
+
     default:
       return state;
   }
@@ -30,27 +56,42 @@ const taskReducer = (state, action) => {
 
 export default function TaskProvider({ children }) {
   const [tasks, dispatch] = useReducer(taskReducer, initialTasks);
+  const { token, user } = useContext(AuthContext);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         setLoading(true);
-        const allTasks = await TaskApi.getAllTasks(token);
+        let data;
 
-        dispatch({ type: "SET_TASKS", payload: allTasks });
+        if (user.role === "admin") {
+          data = await TaskApi.getAllTasks(token);
+          dispatch({ type: "SET_TASKS", payload: data });
+        } else {
+          data = await TaskApi.getTasksById(token, user.id);
+          dispatch({ type: "SET_MY_TASKS", payload: data.tasks || [] });
+        }
       } catch (err) {
         console.error("Error fetching tasks:", err);
-        setError(err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-    if (token) fetchTasks();
-  }, [token]);
 
-  const value = { tasks, dispatch, loading, error, setError, setLoading };
+    if (token && user) fetchTasks();
+  }, [token, user]);
+
+  const { allTasks, myTasks, selectedTask } = tasks;
+
+  const value = {
+    allTasks,
+    myTasks,
+    selectedTask,
+    dispatch,
+  };
+
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;
 }
