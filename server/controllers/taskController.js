@@ -17,6 +17,7 @@ export const createTask = async (req, res, next) => {
     if (!title) return res.status(400).json({ error: "Title is required" });
     const userId = req.user.userId;
     if (!userId) return res.status(400).json({ error: "User is not found" });
+
     const newTask = await Task.add(title, description, userId);
     res.status(201).json(newTask);
   } catch (err) {

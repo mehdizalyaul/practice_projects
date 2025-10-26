@@ -1,47 +1,46 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import "../styles/TaskForm.css";
 import { motion } from "framer-motion";
 
 export default function TaskForm({ handleAddTask }) {
-  const inputRef = useRef();
+  const titleRef = useRef();
   const [title, setTitle] = useState("");
-  const [description, setDescripton] = useState("");
+  const [description, setDescription] = useState("");
 
-  // Focus input when component renders or after adding a task and make title and description empty
-  useEffect(() => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!title.trim() || !description.trim()) return;
+    handleAddTask(title, description);
     setTitle("");
-    setDescripton("");
-    inputRef.current.focus();
-  }, [handleAddTask]);
+    setDescription("");
+    titleRef.current.focus();
+  };
 
   return (
-    <motion.div
+    <motion.form
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       className="task-form"
+      onSubmit={handleSubmit}
     >
       <input
         type="text"
         value={title}
-        ref={inputRef}
+        ref={titleRef}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Enter the task title"
       />
-      <input
-        type="description"
+
+      <textarea
         value={description}
-        ref={inputRef}
-        onChange={(e) => setDescripton(e.target.value)}
+        onChange={(e) => setDescription(e.target.value)}
         placeholder="Enter the task description"
-      />
-      <button
-        className="add-button"
-        onClick={() => {
-          handleAddTask(title, description);
-        }}
-      >
+        rows={3}
+      ></textarea>
+
+      <button type="submit" className="add-button">
         Add Task
       </button>
-    </motion.div>
+    </motion.form>
   );
 }

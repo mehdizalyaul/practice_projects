@@ -14,15 +14,15 @@ export const getAll = () => {
 export const add = (title, description, userId) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO tasks (title, completed,description, user_id) VALUES (?, ? , ? , ?)",
-      [title, false, description, userId],
+      "INSERT INTO tasks (title,description, user_id) VALUES (?, ? , ?)",
+      [title, description, userId],
       (err, results) => {
         if (err) return reject(err);
         resolve({
           id: results.insertId,
           title,
           description,
-          completed: false,
+          status: "todo",
           userId,
         });
       }
