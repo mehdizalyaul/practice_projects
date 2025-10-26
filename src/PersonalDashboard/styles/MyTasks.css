@@ -1,0 +1,111 @@
+/* Container for search and add button */
+.tasks-search-add {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+/* Input field */
+.tasks-container input {
+  flex: 1;
+  height: 40px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Light Theme Input */
+body.light .tasks-container input[type="text"] {
+  background: #fff;
+  border: 1px solid #ccc;
+  color: #222;
+}
+
+/* Dark Theme Input */
+body.dark .tasks-container input[type="text"] {
+  background: #3a3a3a;
+  border: 1px solid #555;
+  color: #f1f1f1;
+}
+
+.tasks-container input[type="text"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+}
+
+/* Buttons */
+.tasks-container button {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+
+/* Light Theme Buttons */
+body.light .tasks-container button {
+  background: #007bff;
+  color: #fff;
+}
+
+body.light .tasks-container button:hover {
+  background: #0056b3;
+}
+
+/* Dark Theme Buttons */
+body.dark .tasks-container button {
+  background: #0056b3;
+  color: #fff;
+}
+
+body.dark .tasks-container button:hover {
+  background: #003f7f;
+}
+
+.tasks-container button:active {
+  transform: scale(0.98);
+}
+
+/* Grid layout for task columns */
+.task-lists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  padding: 0 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Header for optional top section */
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .task-lists-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .task-lists-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tasks-search-add {
+    gap: 8px;
+  }
+
+  .tasks-container button {
+    width: 100%;
+  }
+}

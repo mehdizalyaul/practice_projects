@@ -1,188 +1,46 @@
-/* Container */
+/* === Main Container === */
 .tasks-container {
-  max-width: 600px;
+  max-width: 1400px;
   margin: 40px auto;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: sans-serif;
   transition: background 0.3s, color 0.3s;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
-/* Light theme */
+/* Light Theme */
 body.light .tasks-container {
   background-color: #f9f9f9;
   color: #222;
 }
 
-/* Dark theme */
+/* Dark Theme */
 body.dark .tasks-container {
   background-color: #2c2c2c;
   color: #f1f1f1;
   box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
 }
 
-/* Heading */
+/* === Heading === */
 .tasks-container > h1 {
   text-align: center;
-}
-
-/* Header */
-.tasks-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 20px;
+  font-size: 2rem;
 }
 
-.tasks-header h1 {
-  font-size: 1.8rem;
+/* === Grid Layout for Columns === */
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  align-items: start;
 }
 
-.tasks-header a {
-  display: inline-block;
-  margin-top: 16px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s;
-}
-
-.tasks-header a:hover {
-  text-decoration: underline;
-}
-
-/* List */
-.tasks-list {
-  list-style: none;
-  padding: 0;
-  width: 80%;
-}
-
-.tasks-item_info {
-  max-width: 60%;
-}
-.tasks-item_buttons {
-}
-
-/* Task item */
-.tasks-item,
-.task-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 8px;
-  padding: 12px 20px;
-  margin-bottom: 12px;
-  transition: background-color 0.3s, transform 0.1s ease-in-out;
-  background-color: #a8df12;
-}
-
-/* Light theme task items */
-body.light .tasks-item,
-body.light .task-item {
-  background-color: #f8f9fb;
-  border: 1px solid #ddd;
-}
-
-/* Dark theme task items */
-body.dark .tasks-item,
-body.dark .task-item {
-  background-color: #3a3a3a;
-  border: 1px solid #555;
-  color: #f1f1f1;
-}
-
-.tasks-item:hover,
-.task-item:hover {
-  transform: scale(1.02);
-}
-
-body.light .tasks-item:hover,
-body.light .task-item:hover {
-  background-color: #eef3f7;
-}
-
-body.dark .tasks-item:hover,
-body.dark .task-item:hover {
-  background-color: #4a4a4a;
-}
-
-/* Left side */
-.tasks-item div:first-child {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* Links */
-.tasks-item a {
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 16px;
-}
-
-.tasks-item a:hover {
-  text-decoration: underline;
-}
-
-/* Status text */
-.tasks-item p {
-  margin: 0;
-  font-size: 14px;
-}
-
-/* Buttons container */
-.tasks-item div:last-child button,
-button {
-  margin-left: 10px;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-/* Light theme buttons */
-body.light .tasks-item div:last-child button,
-body.light button {
-  background-color: #007bff;
-  color: #fff;
-}
-
-body.light .tasks-item div:last-child button:last-child {
-  background-color: #dc3545;
-}
-
-body.light .tasks-item div:last-child button:last-child:hover {
-  background-color: #b52a36;
-}
-
-body.light .tasks-item div:last-child button:hover,
-body.light button:hover {
-  background-color: #0056b3;
-}
-
-/* Dark theme buttons */
-body.dark .tasks-item div:last-child button,
-body.dark button {
-  background-color: #0056b3;
-  color: #fff;
-}
-
-body.dark .tasks-item div:last-child button:last-child {
-  background-color: #b52a36;
-}
-
-body.dark .tasks-item div:last-child button:last-child:hover {
-  background-color: #8a1f27;
-}
-
-body.dark .tasks-item div:last-child button:hover,
-body.dark button:hover {
-  background-color: #003f7f;
+/* === Responsive === */
+@media (max-width: 768px) {
+  .tasks-grid {
+    grid-template-columns: 1fr;
+  }
 }

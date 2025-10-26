@@ -1,43 +1,79 @@
-/* Input fields */
-input {
-  padding: 8px;
-  border-radius: 6px;
-  width: 80%;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  transition: background 0.3s, color 0.3s, border-color 0.3s;
+/* Container */
+.task-form {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-body.dark input {
-  background: #3a3a3a;
-  border-color: #555;
+/* Dark mode */
+body.dark .task-form {
+  background-color: #3a3a3a;
+  color: #f1f1f1;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+}
+
+/* Input and textarea */
+.task-form input,
+.task-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+  outline: none;
+}
+
+/* Dark mode inputs */
+body.dark .task-form input,
+body.dark .task-form textarea {
+  background-color: #4a4a4a;
+  border: 1px solid #666;
   color: #f1f1f1;
 }
 
-/* Add button */
-.add-button {
-  padding: 8px 14px;
-  border-radius: 6px;
-  margin-left: 8px;
-  cursor: pointer;
-  border: none;
-  transition: background 0.3s, color 0.3s;
+/* Focus state */
+.task-form input:focus,
+.task-form textarea:focus {
+  border-color: #007bff;
 }
 
-body.light .add-button {
+/* Button */
+.task-form .add-button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
   background-color: #007bff;
   color: #fff;
+  transition: background-color 0.3s;
 }
 
-body.light .add-button:hover {
+/* Dark mode button */
+body.dark .task-form .add-button {
   background-color: #0056b3;
 }
 
-body.dark .add-button {
+/* Hover */
+.task-form .add-button:hover {
   background-color: #0056b3;
-  color: #fff;
 }
 
-body.dark .add-button:hover {
+body.dark .task-form .add-button:hover {
   background-color: #003f7f;
+}
+
+/* Optional: textarea auto resize */
+.task-form textarea {
+  resize: vertical;
 }
