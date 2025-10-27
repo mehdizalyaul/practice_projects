@@ -38,14 +38,18 @@ const taskReducer = (state, action) => {
         myTasks: state.myTasks.filter((t) => t.id !== action.payload),
       };
 
-    case "TOGGLE_TASK":
+    case "UPDATE_TASK_STATUS":
       return {
         ...state,
         allTasks: state.allTasks.map((t) =>
-          t.id === action.payload ? { ...t, completed: !t.completed } : t
+          t.id === action.payload.id
+            ? { ...t, status: action.payload.status }
+            : t
         ),
         myTasks: state.myTasks.map((t) =>
-          t.id === action.payload ? { ...t, completed: !t.completed } : t
+          t.id === action.payload.id
+            ? { ...t, status: action.payload.status }
+            : t
         ),
       };
 

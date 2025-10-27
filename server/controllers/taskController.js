@@ -29,7 +29,14 @@ export const createTask = async (req, res, next) => {
 export const updateTask = async (req, res, next) => {
   try {
     const { id } = req.params;
-    await Task.toggle(id);
+    if (!id) {
+      res.status(400).json("ID Not in params Provided");
+    }
+    const { status } = req.body;
+    if (!status) {
+      res.status(400).json("Status Not Provided");
+    }
+    await Task.update(id, status);
     res.json({ message: "Task updated successfully" });
   } catch (err) {
     next(error);

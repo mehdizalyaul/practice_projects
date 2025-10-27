@@ -30,12 +30,12 @@ export const add = (title, description, userId) => {
   });
 };
 
-// Update (toggle completed)
-export const toggle = (id) => {
+// Update
+export const update = (id, status) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "UPDATE tasks SET completed = NOT completed WHERE id = ?",
-      [id],
+      "UPDATE tasks SET status = ? WHERE id = ?",
+      [status, id],
       (err, results) => {
         if (err) return reject(err);
         resolve(results);

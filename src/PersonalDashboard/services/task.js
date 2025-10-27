@@ -38,7 +38,7 @@ export const getTasksById = async (token, id) => {
   }
 };
 
-export const updateTaskStatus = async (token, id) => {
+export const updateTaskStatus = async (token, id, status) => {
   try {
     const res = await fetch(`${BACKEND_URL}/tasks/${id}`, {
       method: "PUT",
@@ -46,6 +46,7 @@ export const updateTaskStatus = async (token, id) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({ status }),
     });
 
     if (!res.ok) {
