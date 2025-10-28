@@ -49,13 +49,21 @@ export const updateTaskStatus = async (token, id, status) => {
       body: JSON.stringify({ status }),
     });
 
+    const payload = await res.json().catch(() => ({}));
+
     if (!res.ok) {
-      throw new Error(res.message);
+      // prefer server message, fallback to statusText or generic message
+      const message =
+        payload?.message || res.statusText || "Failed to update task";
+      const err = new Error(message);
+      err.status = res.status;
+      err.payload = payload;
+      throw err;
     }
 
-    return await res.json();
+    return payload; // parsed response
   } catch (error) {
-    console.error(error);
+    console.error("updateTaskStatus error:", error);
     throw error;
   }
 };

@@ -11,7 +11,7 @@ import TaskForm from "../components/TaskForm";
 import { NotificationContext } from "../context/NotificationContext";
 import { motion } from "framer-motion";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
-import { useDroppable } from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
 
 import "../styles/Notification.css";
 import "../styles/MyTasks.css";
@@ -108,19 +108,87 @@ export default function MyTasks() {
     const { active, over } = event;
     if (!over) return;
 
-    const fromStatus = active.data.current?.status;
-    const toStatus = over.id;
+    const activeId = active.id;
+    const overId = over.id;
 
-    if (fromStatus === toStatus) return;
+    // Find task objects
+    const activeTask = tasks.find((t) => t.id === activeId);
+    const overTask = tasks.find((t) => t.id === overId);
 
-    const task = tasks.find((t) => t.id === active.id);
+    // Determine fromStatus (where the dragged task came from)
+    const fromStatus = active.data?.current?.status ?? activeTask?.status;
 
-    if (!task) return;
+    // Determine toStatus:
+    // - if over is a droppable column, over.id will be that column id (we set it)
+    // - if over is another task, use that task's status
+    let toStatus =
+      over.data?.current?.status || (overTask ? overTask.status : overId);
 
-    TaskApi.updateTaskStatus(token, task.id, toStatus);
-    dispatch({
-      type: "UPDATE_TASK_STATUS",
-      payload: { id: task.id, status: toStatus },
+    // If somehow toStatus is still an item id, fallback: try find that item and use its status
+    if (!["todo", "in_progress", "review", "done"].includes(toStatus)) {
+      const maybe = tasks.find((t) => t.id === overId);
+      if (maybe) toStatus = maybe.status;
+    }
+
+    // If no valid statuses, abort
+    if (!fromStatus || !toStatus) return;
+
+    // If same column: handle reorder
+    if (fromStatus === toStatus) {
+      const columnTasks = tasks.filter((t) => t.status === fromStatus);
+      const oldIndex = columnTasks.findIndex((t) => t.id === activeId);
+      const newIndex = columnTasks.findIndex((t) => t.id === overId);
+
+      // If overId is the column id itself (dropped on empty area), put it at end
+      const resolvedNewIndex =
+        newIndex === -1 ? columnTasks.length - 1 : newIndex;
+
+      if (oldIndex !== resolvedNewIndex && oldIndex !== -1) {
+        const reordered = arrayMove(columnTasks, oldIndex, resolvedNewIndex);
+
+        // Build new tasks array: replace the column slice with reordered
+        const newTasks = [
+          ...tasks.filter((t) => t.status !== fromStatus),
+          ...reordered,
+        ];
+
+        // Dispatch an action to set tasks (adjust to your reducer)
+        dispatch({ type: "SET_MY_TASKS", payload: newTasks });
+
+        // (Optional) persist ordering to backend if you store order — otherwise skip API
+      }
+      setActiveTask(null);
+      return;
+    }
+
+    // Cross-column move
+    // Remove from source and add to destination (insert at top)
+    const sourceList = tasks.filter((t) => t.status === fromStatus);
+    const targetList = tasks.filter((t) => t.status === toStatus);
+
+    const movingTask = activeTask;
+    if (!movingTask) {
+      setActiveTask(null);
+      return;
+    }
+
+    const newSource = sourceList.filter((t) => t.id !== activeId);
+    const newTarget = [{ ...movingTask, status: toStatus }, ...targetList];
+
+    // Build new tasks list preserving other tasks
+    const otherTasks = tasks.filter(
+      (t) => t.status !== fromStatus && t.status !== toStatus
+    );
+    const newTasks = [...otherTasks, ...newSource, ...newTarget];
+
+    // Optimistically update UI
+    dispatch({ type: "SET_MY_TASKS", payload: newTasks });
+
+    // Persist change to backend (use robust API; catch errors and rollback if needed)
+    updateTaskStatus(token, activeId, toStatus).catch((err) => {
+      console.error("Failed to update status on server:", err);
+      // rollback: simplest approach - refetch from server or reverse optimistic update
+      // e.g. dispatch({ type: "REFRESH_TASKS_FROM_SERVER" }) or refetch tasks
     });
 
     setActiveTask(null);
