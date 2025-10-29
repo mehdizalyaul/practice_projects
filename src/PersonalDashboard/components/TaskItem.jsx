@@ -13,6 +13,7 @@ export default function TaskItem({ task, toggleTask, deleteTask }) {
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
         transition,
+        cursor: "grab",
       }
     : undefined;
 
