@@ -1,17 +1,15 @@
 import { useContext, useState, useCallback, useMemo } from "react";
-import { TaskContext } from "../context/TaskContext";
-import { AuthContext } from "../context/AuthContext";
-import { TaskApi } from "../services/index";
-import TaskList from "../components/TaskList";
-import TaskItem from "../components/TaskItem";
-import Spinner from "../components/Spinner";
-import NoTasks from "../components/NoTasks";
-import Error from "../components/Error";
-import TaskForm from "../components/TaskForm";
-import { NotificationContext } from "../context/NotificationContext";
 import { motion } from "framer-motion";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
+import {
+  AuthContext,
+  TaskContext,
+  SearchContext,
+  NotificationContext,
+} from "../context";
+import { TaskApi } from "../services/index";
+import { TaskList, TaskItem, Spinner, NoTasks, Error } from "../components";
 import "../styles/Notification.css";
 import "../styles/MyTasks.css";
 
@@ -21,7 +19,7 @@ export default function MyTasks() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isForm, setIsForm] = useState(false);
-  const [search, setSearch] = useState("");
+  const { search } = useContext(SearchContext);
   const { showNotification } = useContext(NotificationContext);
   const [activeTask, setActiveTask] = useState(null);
 
@@ -89,6 +87,8 @@ export default function MyTasks() {
 
   const deleteTask = useCallback(
     async (id) => {
+      console.log(id);
+
       setLoading(true);
       setError(null);
       try {
@@ -166,18 +166,7 @@ export default function MyTasks() {
     >
       <h1>My Tasks</h1>
 
-      <div className="tasks-search-add">
-        <input
-          type="text"
-          name="search"
-          placeholder="Search tasks..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <button onClick={() => setIsForm((prev) => !prev)}>Add Task</button>
-      </div>
-
-      {isForm && <TaskForm handleAddTask={handleAddTask} />}
+      {/*{isForm && <TaskForm handleAddTask={handleAddTask} />}*/}
 
       {filteredTasks.length > 0 && (
         <DndContext
@@ -199,6 +188,7 @@ export default function MyTasks() {
                 tasks={allTasks[status]}
                 toggleTask={toggleTask}
                 deleteTask={deleteTask}
+                handleAddTask={handleAddTask}
               />
             ))}
           </div>
