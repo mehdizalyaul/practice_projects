@@ -4,7 +4,7 @@ import { Trash, SquarePen, GripVertical } from "lucide-react";
 import "../styles/TaskItem.css";
 import { useEffect } from "react";
 
-export default function TaskItem({ task, toggleTask, deleteTask }) {
+export default function TaskItem({ task, toggleTask, deleteTask, openModal }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: task.id });
 
@@ -53,7 +53,9 @@ export default function TaskItem({ task, toggleTask, deleteTask }) {
           className="button button-edit"
           onClick={(e) => {
             e.stopPropagation();
-            toggleTask(task.id);
+            openModal(task);
+
+            // toggleTask(task.id);
           }}
         />
         <Trash

@@ -1,11 +1,10 @@
 import { useRef, useState } from "react";
 import "../styles/TaskForm.css";
-import { motion } from "framer-motion";
 
-export default function TaskForm({ handleAddTask }) {
+export default function TaskForm({ task, handleAddTask }) {
   const titleRef = useRef();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState(task.title || "");
+  const [description, setDescription] = useState(task.description || "");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,12 +16,7 @@ export default function TaskForm({ handleAddTask }) {
   };
 
   return (
-    <motion.form
-      initial={{ scale: 0.95, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      className="task-form"
-      onSubmit={handleSubmit}
-    >
+    <form className="task-form" onSubmit={handleSubmit}>
       <input
         type="text"
         value={title}
@@ -41,6 +35,6 @@ export default function TaskForm({ handleAddTask }) {
       <button type="submit" className="add-button">
         Add Task
       </button>
-    </motion.form>
+    </form>
   );
 }

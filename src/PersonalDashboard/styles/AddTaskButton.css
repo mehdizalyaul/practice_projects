@@ -1,0 +1,11 @@
+.add-task {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 5px;
+}
+
+.add-task p {
+  font-size: 15px;
+  font-weight: bold;
+}
