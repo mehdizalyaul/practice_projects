@@ -1,12 +1,16 @@
 import { NavLink } from "react-router-dom";
-import "../styles/Navbar.css";
 import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
+import { SearchContext } from "../context/SearchContext";
+
+import Search from "./Search";
+import "../styles/Navbar.css";
 
 export default function Navbar() {
   const { toggleTheme } = useContext(ThemeContext);
   const { isAuthenticated, logout, user } = useContext(AuthContext);
+  const { search, setSearch } = useContext(SearchContext);
   return (
     <nav>
       <div>
@@ -21,15 +25,17 @@ export default function Navbar() {
         )}
 
         {isAuthenticated && (
-          <>
+          <div className="navbar-navigation">
             <NavLink to="/tasks/mine">MyTasks</NavLink>
             <NavLink to="/settings">Settings</NavLink>
             <NavLink to="/login" onClick={logout}>
               Logout
             </NavLink>
-          </>
+          </div>
         )}
       </div>
+      {isAuthenticated && <Search search={search} setSearch={setSearch} />}
+
       <div>
         <input
           type="checkbox"

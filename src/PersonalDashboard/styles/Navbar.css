@@ -7,6 +7,11 @@ nav {
   font-family: "Montserrat", sans-serif;
 }
 
+.navbar-navigation {
+  display: flex;
+  align-items: center;
+}
+
 nav a {
   color: white;
   text-decoration: none;

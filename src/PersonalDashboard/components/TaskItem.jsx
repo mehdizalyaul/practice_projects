@@ -1,61 +1,68 @@
 import { useSortable } from "@dnd-kit/sortable";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Trash, SquarePen, GripVertical } from "lucide-react";
 import "../styles/TaskItem.css";
+import { useEffect } from "react";
 
 export default function TaskItem({ task, toggleTask, deleteTask }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: task.id,
-    });
+    useSortable({ id: task.id });
 
   const style = transform
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
         transition,
-        cursor: "grab",
       }
     : undefined;
-
   const statusStyle = {
-    color:
+    borderLeft:
       task.status === "todo"
-        ? "gray"
+        ? "10px solid #9CA3AF" // Cool Gray
         : task.status === "in_progress"
-        ? "orange"
+        ? "10px solid #F59E0B" // Amber
         : task.status === "review"
-        ? "blue"
-        : "green",
-    fontWeight: "bold",
-    fontSize: "18px",
+        ? "10px solid #3B82F6" // Soft Blue
+        : "10px solid #10B981", // Emerald Green
   };
 
   return (
     <motion.li
       ref={setNodeRef}
-      style={{ ...style }}
-      {...listeners}
+      style={{
+        ...style,
+        borderLeft: statusStyle.borderLeft,
+      }}
       {...attributes}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0.25, y: -20 }}
-      transition={{ duration: 1.3 }}
       className="tasks-item"
     >
-      <div className="tasks-item_info">
-        <Link to={`/tasks/${task.id}`}>
-          {task.title.charAt(0).toUpperCase() + task.title.slice(1)}
-        </Link>
-        <p>{task.description}</p>
-        <p style={statusStyle}>
-          {task.status.charAt(0).toUpperCase() +
-            task.status.slice(1).replace("_", " ")}
-        </p>
+      {/* Drag Handle */}
+      <div className="drag-handle" {...listeners} style={{ cursor: "grab" }}>
+        <GripVertical className="drag-handle-grip" size={20} />
+      </div>
+
+      <div
+        className="tasks-item_info"
+        onClick={() => console.log("Parent clicked!")}
+      >
+        <p>{task.title}</p>
+        <p>{task.description.slice(0, 30)}</p>
       </div>
 
       <div className="tasks-item_buttons">
-        <button onClick={() => toggleTask(task.id)}>Toggle</button>
-        <button onClick={() => deleteTask(task.id)}>Delete</button>
+        <SquarePen
+          className="button button-edit"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleTask(task.id);
+          }}
+        />
+        <Trash
+          className="button button-delete"
+          onClick={(e) => {
+            e.stopPropagation();
+            deleteTask(task.id);
+          }}
+        />
       </div>
     </motion.li>
   );

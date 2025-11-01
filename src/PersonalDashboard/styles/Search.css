@@ -1,0 +1,36 @@
+/* Container for search and add button */
+.tasks-search {
+  display: flex;
+  justify-content: left;
+  padding-left: 5%;
+  width: 100%;
+}
+
+/* Input field */
+.tasks-search input {
+  height: 40px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: 70%;
+}
+
+/* Light Theme Input */
+body.light .tasks-search input[type="text"] {
+  background: #fff;
+  border: 1px solid #ccc;
+  color: #222;
+}
+
+/* Dark Theme Input */
+body.dark .tasks-search input[type="text"] {
+  background: #3a3a3a;
+  border: 1px solid #555;
+  color: #f1f1f1;
+}
+
+.tasks-search input[type="text"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+}

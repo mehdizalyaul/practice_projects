@@ -1,40 +1,3 @@
-/* Container for search and add button */
-.tasks-search-add {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 1rem;
-}
-
-/* Input field */
-.tasks-container input {
-  flex: 1;
-  height: 40px;
-  padding: 8px 18px;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-/* Light Theme Input */
-body.light .tasks-container input[type="text"] {
-  background: #fff;
-  border: 1px solid #ccc;
-  color: #222;
-}
-
-/* Dark Theme Input */
-body.dark .tasks-container input[type="text"] {
-  background: #3a3a3a;
-  border: 1px solid #555;
-  color: #f1f1f1;
-}
-
-.tasks-container input[type="text"]:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
-}
-
 /* Buttons */
 .tasks-container button {
   height: 40px;
@@ -48,22 +11,22 @@ body.dark .tasks-container input[type="text"] {
 
 /* Light Theme Buttons */
 body.light .tasks-container button {
-  background: #007bff;
-  color: #fff;
+  background: #f9f9f9;
+  color: #333;
 }
 
 body.light .tasks-container button:hover {
-  background: #0056b3;
+  background: #e2e4e7;
 }
 
 /* Dark Theme Buttons */
 body.dark .tasks-container button {
-  background: #0056b3;
+  background: #333;
   color: #fff;
 }
 
 body.dark .tasks-container button:hover {
-  background: #003f7f;
+  background: #444;
 }
 
 .tasks-container button:active {

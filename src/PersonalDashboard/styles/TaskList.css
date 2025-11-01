@@ -1,5 +1,8 @@
 /* Each column (Todo, In Progress, Review, Done) */
 .task-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: var(--column-bg, #f4f4f4);
   border-radius: 12px;
   padding: 1rem;
@@ -35,11 +38,11 @@ body.dark .task-column {
   background-color: #333;
   border: 1px solid #444;
 }
-
+/*
 .task-column:hover {
   transform: translateY(-3px);
 }
-
+*/
 .task-column .no-tasks-text {
   justify-self: center;
 }
