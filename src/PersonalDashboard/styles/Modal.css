@@ -1,21 +1,48 @@
+/* === Modal Overlay === */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.4); /* default overlay for light mode */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  transition: background 0.3s ease;
 }
 
+/* === Modal Content === */
 .modal-content {
-  background: #fff;
+  background: #fff; /* light mode default */
+  color: #111827;
   padding: 1.5rem;
   border-radius: 1rem;
   max-width: 400px;
   width: 90%;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* === Light Mode === */
+body.light .modal-overlay {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+body.light .modal-content {
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* === Dark Mode === */
+body.dark .modal-overlay {
+  background: rgba(0, 0, 0, 0.6); /* stronger overlay for dark mode */
+}
+
+body.dark .modal-content {
+  background: #2e2e2e;
+  color: #f1f1f1;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
 }

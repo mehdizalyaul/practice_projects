@@ -1,8 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
-import { ThemeContext } from "../context/ThemeContext";
-import { AuthContext } from "../context/AuthContext";
-import { SearchContext } from "../context/SearchContext";
+import { ThemeContext, AuthContext, SearchContext } from "../context";
 
 import Search from "./Search";
 import "../styles/Navbar.css";

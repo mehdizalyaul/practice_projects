@@ -2,8 +2,9 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import "../styles/Login.css";
 import Error from "../components/Error";
+
+import "../styles/Login.css";
 
 export default function Login() {
   const { login } = useContext(AuthContext);

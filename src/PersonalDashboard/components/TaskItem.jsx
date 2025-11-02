@@ -1,8 +1,8 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { motion } from "framer-motion";
 import { Trash, SquarePen, GripVertical } from "lucide-react";
+import getStatusColor from "../utils/getStatusColor";
 import "../styles/TaskItem.css";
-import { useEffect } from "react";
 
 export default function TaskItem({ task, toggleTask, deleteTask, openModal }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -15,14 +15,7 @@ export default function TaskItem({ task, toggleTask, deleteTask, openModal }) {
       }
     : undefined;
   const statusStyle = {
-    borderLeft:
-      task.status === "todo"
-        ? "10px solid #9CA3AF" // Cool Gray
-        : task.status === "in_progress"
-        ? "10px solid #F59E0B" // Amber
-        : task.status === "review"
-        ? "10px solid #3B82F6" // Soft Blue
-        : "10px solid #10B981", // Emerald Green
+    borderLeft: `10px solid ${getStatusColor(task.status)}`,
   };
 
   return (
