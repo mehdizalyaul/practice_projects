@@ -11,6 +11,7 @@ import "../styles/Notification.css";
 import { motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
 import { TaskApi } from "../services/index";
+
 export default function TasksPage() {
   const { tasks, dispatch, error, setError, loading, setLoading } =
     useContext(TaskContext);

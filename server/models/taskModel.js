@@ -11,19 +11,22 @@ export const getAll = () => {
 };
 
 // Add new task
-export const add = (title, description, userId) => {
+export const add = (newTask) => {
+  const { title, description, status, priority, dueDate } = newTask;
+
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO tasks (title,description, user_id) VALUES (?, ? , ?)",
-      [title, description, userId],
+      "INSERT INTO tasks (title,description, status, priority,due_date,project_id,created_by ) VALUES (? ,? ,? ,? ,?,?,? )",
+      [title, description, status, priority, dueDate, projectId, 1],
       (err, results) => {
         if (err) return reject(err);
         resolve({
           id: results.insertId,
           title,
           description,
-          status: "todo",
-          userId,
+          status,
+          priority,
+          dueDate,
         });
       }
     );
@@ -31,7 +34,22 @@ export const add = (title, description, userId) => {
 };
 
 // Update
-export const update = (id, status) => {
+export const update = (newTask) => {
+  const { id, title, description, status, priority, dueDate } = newTask;
+  return new Promise((resolve, reject) => {
+    db.query(
+      "UPDATE tasks SET title = ? , description = ? , status = ? , priority = ? due_date = ? WHERE id = ?",
+      [title, description, status, priority, dueDate, id],
+      (err, results) => {
+        if (err) return reject(err);
+        resolve(results);
+      }
+    );
+  });
+};
+
+// Update Status
+export const updateStatus = (id, status) => {
   return new Promise((resolve, reject) => {
     db.query(
       "UPDATE tasks SET status = ? WHERE id = ?",

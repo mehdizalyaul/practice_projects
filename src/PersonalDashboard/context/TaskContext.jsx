@@ -31,6 +31,17 @@ const taskReducer = (state, action) => {
         myTasks: [...state.myTasks, action.payload],
       };
 
+    case "UPDATE_TASK": {
+      const update = (tasks) =>
+        tasks.map((t) => (t.id === action.payload.id ? action.payload : t));
+
+      return {
+        ...state,
+        allTasks: update(state.allTasks),
+        myTasks: update(state.myTasks),
+      };
+    }
+
     case "DELETE_TASK":
       return {
         ...state,

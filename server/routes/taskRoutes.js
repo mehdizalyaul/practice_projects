@@ -5,6 +5,7 @@ import {
   updateTask,
   removeTask,
   getTasksById,
+  updateTaskStatus,
 } from "../controllers/taskController.js";
 import { validateId, validateTask } from "../validators/validateTask.js";
 import { validate } from "../middleware/validate.js";
@@ -31,13 +32,21 @@ router.post(
   authorize(["admin", "user"]),
   createTask
 );
-// Toggle Task to Completed or Incompleted
+// Update a Task
 router.put(
   "/:id",
   validateId,
   validate,
   authorize(["admin", "user"]),
   updateTask
+);
+// Toggle Task to Completed or Incompleted
+router.patch(
+  "/:id",
+  validateId,
+  validate,
+  authorize(["admin", "user"]),
+  updateTaskStatus
 );
 // Delete A Task
 router.delete(

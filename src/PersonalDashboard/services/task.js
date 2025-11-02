@@ -41,7 +41,7 @@ export const getTasksById = async (token, id) => {
 export const updateTaskStatus = async (token, id, status) => {
   try {
     const res = await fetch(`${BACKEND_URL}/tasks/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -88,20 +88,43 @@ export const deleteTask = async (token, id) => {
   }
 };
 
-export const createTask = async (token, title, description) => {
+export const createTask = async (token, newTask) => {
   const res = await fetch(`${BACKEND_URL}/tasks`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ title, description }),
+    body: JSON.stringify({ newTask }),
   });
 
   const data = await res.json();
   if (!res.ok) {
-    console.log("Yes error");
+    // handle both array and string cases
+    const message = Array.isArray(data?.message)
+      ? data.message[0]?.msg
+      : data?.message || "Something went wrong";
 
+    const err = new Error(message);
+    err.response = message;
+    throw err;
+  }
+
+  return data;
+};
+
+export const updateTask = async (token, updatedTask) => {
+  const id = updatedTask.id;
+  const res = await fetch(`${BACKEND_URL}/tasks/${id}`, {
+    methode: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ updatedTask }),
+  });
+  const data = await res.json();
+  if (!res.ok) {
     // handle both array and string cases
     const message = Array.isArray(data?.message)
       ? data.message[0]?.msg

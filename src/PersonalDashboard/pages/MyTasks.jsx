@@ -12,6 +12,7 @@ import { TaskApi } from "../services/index";
 import { TaskList, TaskItem, Spinner, NoTasks, Error } from "../components";
 import "../styles/Notification.css";
 import "../styles/MyTasks.css";
+import { STATUS } from "../utils/constants";
 
 export default function MyTasks() {
   const { myTasks: tasks, dispatch } = useContext(TaskContext);
@@ -45,18 +46,35 @@ export default function MyTasks() {
     [filteredTasks]
   );
 
-  const handleAddTask = useCallback(
-    async (title, description) => {
-      if (!title.trim() || !description.trim()) return;
-
+  const addTask = useCallback(
+    async (newTask) => {
       setLoading(true);
       setError(null);
 
       try {
-        const data = await TaskApi.createTask(token, title, description);
+        const data = await TaskApi.createTask(token, newTask);
         dispatch({ type: "ADD_TASK", payload: data });
         setIsForm(false);
         showNotification("Task added successfully!", "success");
+      } catch (error) {
+        setError(error.response || "Unexpected error occurred");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [dispatch, showNotification, token]
+  );
+
+  const updateTask = useCallback(
+    async (updatedTask) => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const data = await TaskApi.updateTask(token, updatedTask);
+        dispatch({ type: "UPDATE_TASK", payload: data });
+        setIsForm(false);
+        showNotification("Task updated successfully!", "success");
       } catch (error) {
         setError(error.response || "Unexpected error occurred");
       } finally {
@@ -166,8 +184,6 @@ export default function MyTasks() {
     >
       <h1>My Tasks</h1>
 
-      {/*{isForm && <TaskForm handleAddTask={handleAddTask} />}*/}
-
       {filteredTasks.length > 0 && (
         <DndContext
           onDragStart={(event) => {
@@ -178,7 +194,7 @@ export default function MyTasks() {
           onDragEnd={handleDragEnd}
         >
           <div className="task-lists-grid">
-            {["todo", "in_progress", "review", "done"].map((status) => (
+            {STATUS.map((status) => (
               <TaskList
                 key={status}
                 id={status}
@@ -188,7 +204,9 @@ export default function MyTasks() {
                 tasks={allTasks[status]}
                 toggleTask={toggleTask}
                 deleteTask={deleteTask}
-                handleAddTask={handleAddTask}
+                addTask={addTask}
+                updateTask={updateTask}
+                dispatch={dispatch}
               />
             ))}
           </div>

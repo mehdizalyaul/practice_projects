@@ -5,7 +5,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState, useCallback, useEffect } from "react";
-import { TaskItem, AddTaskButton, Modal, TaskForm } from "./";
+import { TaskItem, AddTaskButton, Modal, TaskForm, StatusMenu } from "./";
 
 import "../styles/TaskList.css";
 
@@ -15,7 +15,9 @@ export default function TaskList({
   tasks,
   toggleTask,
   deleteTask,
-  handleAddTask,
+  addTask,
+  updateTask,
+  dispatch,
 }) {
   const { setNodeRef } = useDroppable({ id });
   const [modal, setModal] = useState({ open: false, task: null });
@@ -66,7 +68,12 @@ export default function TaskList({
       </div>
       {modal.open && modal.task && (
         <Modal closeModal={handleCloseModal}>
-          <TaskForm task={modal.task} handleAddTask={handleAddTask} />
+          <StatusMenu task={modal.task} dispatch={dispatch} />
+          <TaskForm
+            task={modal.task}
+            addTask={addTask}
+            updateTask={updateTask}
+          />
         </Modal>
       )}
       <AddTaskButton />
