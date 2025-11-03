@@ -25,7 +25,17 @@ export default function AuthProvider({ children }) {
     if (res.token) {
       localStorage.setItem("token", res.token);
       setToken(res.token);
-      return { success: true, user };
+
+      // Decode immediately
+      let decodedUser;
+      try {
+        const decoded = jwtDecode(res.token);
+        decodedUser = { id: decoded.userId, role: decoded.role };
+      } catch {
+        decodedUser = { id: null, role: null };
+      }
+
+      return { success: true, user: decodedUser };
     }
     return { success: false, message: res.message };
   };

@@ -10,11 +10,14 @@ export default function TaskForm({ task, addTask, updateTask }) {
   const [description, setDescription] = useState(task?.description || "");
   const [status, setStatus] = useState(task?.status || "todo");
   const [priority, setPriority] = useState(task?.priority || "medium");
-  const [dueDate, setDueDate] = useState(task?.dueDate || "");
+  const date = task?.dueDate
+    ? new Date(task.dueDate).toISOString().split("T")[0]
+    : "";
+  const [dueDate, setDueDate] = useState(date);
   const [assignee, setAssignee] = useState(task?.assignee || "");
   const [operation, setOperation] = useState(task ? "update" : "add");
   const titleRef = useRef();
-
+  console.log(dueDate);
   function handleSubmit(e) {
     const payload = {
       title,
@@ -26,6 +29,7 @@ export default function TaskForm({ task, addTask, updateTask }) {
     };
     e.preventDefault();
     if (operation === "update") {
+      console.log(payload);
       updateTask({ ...payload, id: task?.id });
     } else {
       addTask(payload);

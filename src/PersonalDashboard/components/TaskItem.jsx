@@ -33,10 +33,7 @@ export default function TaskItem({ task, toggleTask, deleteTask, openModal }) {
         <GripVertical className="drag-handle-grip" size={20} />
       </div>
 
-      <div
-        className="tasks-item_info"
-        onClick={() => console.log("Parent clicked!")}
-      >
+      <div className="tasks-item_info">
         <p>{task.title}</p>
         <p>{task.description.slice(0, 30)}</p>
       </div>

@@ -1,12 +1,18 @@
 import { Plus } from "lucide-react";
 import "../styles/AddTaskButton.css";
-export default function AddTaskButton() {
+import { useContext } from "react";
+import { ThemeContext } from "../context";
+
+export default function AddTaskButton({ onClickAdd }) {
+  const { theme } = useContext(ThemeContext);
   return (
-    <button className="add-task">
-      <Plus
-        color={localStorage.getItem("theme") === "light" ? "white" : "#333"}
-        size={25}
-      />
+    <button
+      className="add-task"
+      onClick={() => {
+        onClickAdd();
+      }}
+    >
+      <Plus color={theme === "dark" ? "white" : "#333"} size={25} />
       <p>Add a card</p>
     </button>
   );

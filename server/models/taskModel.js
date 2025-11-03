@@ -11,13 +11,13 @@ export const getAll = () => {
 };
 
 // Add new task
-export const add = (newTask) => {
+export const add = (newTask, userId) => {
   const { title, description, status, priority, dueDate } = newTask;
 
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO tasks (title,description, status, priority,due_date,project_id,created_by ) VALUES (? ,? ,? ,? ,?,?,? )",
-      [title, description, status, priority, dueDate, projectId, 1],
+      "INSERT INTO tasks (title,description, status, priority,dueDate,user_id ) VALUES (? ,? ,? ,? ,? ,? )",
+      [title, description, status, priority, dueDate, userId],
       (err, results) => {
         if (err) return reject(err);
         resolve({
@@ -38,7 +38,7 @@ export const update = (newTask) => {
   const { id, title, description, status, priority, dueDate } = newTask;
   return new Promise((resolve, reject) => {
     db.query(
-      "UPDATE tasks SET title = ? , description = ? , status = ? , priority = ? due_date = ? WHERE id = ?",
+      "UPDATE tasks SET title = ? , description = ? , status = ? , priority = ? , dueDate = ? WHERE id = ?",
       [title, description, status, priority, dueDate, id],
       (err, results) => {
         if (err) return reject(err);

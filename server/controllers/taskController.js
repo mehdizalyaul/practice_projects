@@ -16,10 +16,11 @@ export const createTask = async (req, res, next) => {
     const newTask = req.body;
     console.log(newTask);
     if (!newTask) return res.status(400).json({ error: "Title is required" });
-    //   const userId = req.user.userId;
-    //  if (!userId) return res.status(400).json({ error: "User is not found" });
+    const userId = req.user.userId;
+    if (!userId) return res.status(400).json({ error: "User is not found" });
 
-    const task = await Task.add(newTask);
+    const task = await Task.add(newTask, userId);
+    console.log(task);
     res.status(201).json(task);
   } catch (error) {
     next(error);
@@ -33,11 +34,11 @@ export const updateTask = async (req, res, next) => {
     if (!id) {
       res.status(400).json("ID Not in params Provided");
     }
-    const { updatedTask } = req.body;
+    const updatedTask = req.body;
     if (!updatedTask) {
       res.status(400).json("Updated Task Not Provided");
     }
-    await Task.update(newTask);
+    await Task.update(updatedTask);
     res.json({ message: "Task updated successfully" });
   } catch (error) {
     next(error);

@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://localhost:5000/api";
+import { BACKEND_URL } from "../utils/constants";
 
 export const register = async (name, email, password) => {
   const res = await fetch(`${BACKEND_URL}/auth/register`, {

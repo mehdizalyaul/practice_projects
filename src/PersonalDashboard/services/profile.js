@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://localhost:5000/api";
+import { BACKEND_URL } from "../utils/constants";
 
 export const getAllProfiles = async (token) => {
   const res = await fetch(`${BACKEND_URL}/profiles`, {

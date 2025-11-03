@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://localhost:5000/api";
+import { BACKEND_URL } from "../utils/constants";
 
 export const getAllTasks = async (token) => {
   try {
@@ -95,10 +95,11 @@ export const createTask = async (token, newTask) => {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ newTask }),
+    body: JSON.stringify(newTask),
   });
 
   const data = await res.json();
+  console.log(data);
   if (!res.ok) {
     // handle both array and string cases
     const message = Array.isArray(data?.message)
@@ -114,16 +115,19 @@ export const createTask = async (token, newTask) => {
 };
 
 export const updateTask = async (token, updatedTask) => {
+  console.log("ghansard");
   const id = updatedTask.id;
   const res = await fetch(`${BACKEND_URL}/tasks/${id}`, {
-    methode: "PUT",
+    method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ updatedTask }),
+    body: JSON.stringify(updatedTask),
   });
   const data = await res.json();
+  console.log(data);
+
   if (!res.ok) {
     // handle both array and string cases
     const message = Array.isArray(data?.message)

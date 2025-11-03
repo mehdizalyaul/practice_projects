@@ -36,6 +36,7 @@ router.post(
 router.put(
   "/:id",
   validateId,
+  validateTask,
   validate,
   authorize(["admin", "user"]),
   updateTask

@@ -15,33 +15,20 @@ export default function TaskList({
   tasks,
   toggleTask,
   deleteTask,
-  addTask,
-  updateTask,
-  dispatch,
+  handleOpenModal,
 }) {
   const { setNodeRef } = useDroppable({ id });
-  const [modal, setModal] = useState({ open: false, task: null });
-
-  useEffect(() => {
-    const handleKeyDown = (e) => e.key === "Escape" && handleCloseModal();
-    if (modal.open) window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [modal.open]);
-
-  const handleOpenModal = useCallback((task) => {
-    setModal({ open: true, task });
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    setModal({ open: false, task: null });
-  });
   return (
     <div ref={setNodeRef} className="task-column">
       <div>
-        <h2 className="task-column-title">{title}</h2>
+        <h2 className="task-column-title" style={{ marginBottom: "25px" }}>
+          {title}
+        </h2>
 
         {tasks.length === 0 ? (
-          <p className="no-tasks-text">No tasks in this section</p>
+          <p className="no-tasks-text" style={{ marginBottom: "25px" }}>
+            No tasks in this section
+          </p>
         ) : (
           <AnimatePresence>
             <ul className="tasks-list">
@@ -66,17 +53,8 @@ export default function TaskList({
           </AnimatePresence>
         )}
       </div>
-      {modal.open && modal.task && (
-        <Modal closeModal={handleCloseModal}>
-          <StatusMenu task={modal.task} dispatch={dispatch} />
-          <TaskForm
-            task={modal.task}
-            addTask={addTask}
-            updateTask={updateTask}
-          />
-        </Modal>
-      )}
-      <AddTaskButton />
+
+      <AddTaskButton status={id} onClickAdd={handleOpenModal} />
     </div>
   );
 }

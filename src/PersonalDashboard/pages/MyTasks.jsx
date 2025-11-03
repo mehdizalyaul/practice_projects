@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback, useMemo } from "react";
+import { useContext, useState, useCallback, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
@@ -9,7 +9,15 @@ import {
   NotificationContext,
 } from "../context";
 import { TaskApi } from "../services/index";
-import { TaskList, TaskItem, Spinner, NoTasks, Error } from "../components";
+import {
+  TaskList,
+  TaskItem,
+  Spinner,
+  Error,
+  Modal,
+  StatusMenu,
+  TaskForm,
+} from "../components";
 import "../styles/Notification.css";
 import "../styles/MyTasks.css";
 import { STATUS } from "../utils/constants";
@@ -19,10 +27,10 @@ export default function MyTasks() {
   const { user, logout, token } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isForm, setIsForm] = useState(false);
   const { search } = useContext(SearchContext);
   const { showNotification } = useContext(NotificationContext);
   const [activeTask, setActiveTask] = useState(null);
+  const [modal, setModal] = useState({ open: false, task: null });
 
   if (!user || !token) {
     logout();
@@ -46,20 +54,37 @@ export default function MyTasks() {
     [filteredTasks]
   );
 
+  useEffect(() => {
+    const handleKeyDown = (e) => e.key === "Escape" && handleCloseModal();
+    if (modal.open) window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [modal.open]);
+
+  const handleOpenModal = useCallback((task = null) => {
+    setModal({ open: true, task });
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setModal({ open: false, task: null });
+  });
+
   const addTask = useCallback(
     async (newTask) => {
+      console.log(newTask);
+
       setLoading(true);
       setError(null);
 
       try {
         const data = await TaskApi.createTask(token, newTask);
+        console.log(data);
         dispatch({ type: "ADD_TASK", payload: data });
-        setIsForm(false);
         showNotification("Task added successfully!", "success");
       } catch (error) {
         setError(error.response || "Unexpected error occurred");
       } finally {
         setLoading(false);
+        handleCloseModal();
       }
     },
     [dispatch, showNotification, token]
@@ -71,14 +96,14 @@ export default function MyTasks() {
       setError(null);
 
       try {
-        const data = await TaskApi.updateTask(token, updatedTask);
-        dispatch({ type: "UPDATE_TASK", payload: data });
-        setIsForm(false);
+        await TaskApi.updateTask(token, updatedTask);
+        dispatch({ type: "UPDATE_TASK", payload: updatedTask });
         showNotification("Task updated successfully!", "success");
       } catch (error) {
         setError(error.response || "Unexpected error occurred");
       } finally {
         setLoading(false);
+        handleCloseModal();
       }
     },
     [dispatch, showNotification, token]
@@ -89,7 +114,7 @@ export default function MyTasks() {
       setLoading(true);
       setError(null);
       try {
-        TaskApi.updateTaskStatus(token, task.id, status);
+        TaskApi.updateTaskStatus(token, taskId, status);
         dispatch({
           type: "UPDATE_TASK_STATUS",
           payload: { id: taskId, status: status },
@@ -105,8 +130,6 @@ export default function MyTasks() {
 
   const deleteTask = useCallback(
     async (id) => {
-      console.log(id);
-
       setLoading(true);
       setError(null);
       try {
@@ -184,47 +207,55 @@ export default function MyTasks() {
     >
       <h1>My Tasks</h1>
 
-      {filteredTasks.length > 0 && (
-        <DndContext
-          onDragStart={(event) => {
-            const { active } = event;
-            const task = tasks.find((t) => t.id === active.id);
-            setActiveTask(task);
-          }}
-          onDragEnd={handleDragEnd}
-        >
-          <div className="task-lists-grid">
-            {STATUS.map((status) => (
-              <TaskList
-                key={status}
-                id={status}
-                title={status
-                  .replace("_", " ")
-                  .replace(/\b\w/g, (c) => c.toUpperCase())}
-                tasks={allTasks[status]}
-                toggleTask={toggleTask}
-                deleteTask={deleteTask}
-                addTask={addTask}
-                updateTask={updateTask}
-                dispatch={dispatch}
-              />
-            ))}
-          </div>
+      <DndContext
+        onDragStart={(event) => {
+          const { active } = event;
+          const task = tasks.find((t) => t.id === active.id);
+          setActiveTask(task);
+        }}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="task-lists-grid">
+          {STATUS.map((status) => (
+            <TaskList
+              key={status}
+              id={status}
+              title={status
+                .replace("_", " ")
+                .replace(/\b\w/g, (c) => c.toUpperCase())}
+              tasks={allTasks[status]}
+              toggleTask={toggleTask}
+              deleteTask={deleteTask}
+              addTask={addTask}
+              updateTask={updateTask}
+              dispatch={dispatch}
+              modal={modal}
+              handleOpenModal={handleOpenModal}
+              handleCloseModal={handleCloseModal}
+            />
+          ))}
+        </div>
 
-          <DragOverlay>
-            {activeTask && (
-              <TaskItem
-                task={activeTask}
-                toggleTask={toggleTask}
-                deleteTask={deleteTask}
-              />
-            )}
-          </DragOverlay>
-        </DndContext>
-      )}
+        <DragOverlay>
+          {activeTask && (
+            <TaskItem
+              task={activeTask}
+              toggleTask={toggleTask}
+              deleteTask={deleteTask}
+            />
+          )}
+        </DragOverlay>
+      </DndContext>
 
-      {filteredTasks.length === 0 && !isForm && (
-        <NoTasks isForm={isForm} setIsForm={setIsForm} />
+      {modal.open && (
+        <Modal closeModal={handleCloseModal}>
+          {modal.task && <StatusMenu task={modal.task} dispatch={dispatch} />}
+          <TaskForm
+            task={modal.task}
+            addTask={addTask}
+            updateTask={updateTask}
+          />
+        </Modal>
       )}
 
       {error && <Error message={error} />}

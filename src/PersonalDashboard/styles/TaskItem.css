@@ -38,8 +38,9 @@ body.dark .tasks-item:hover {
 .tasks-item_info {
   display: flex;
   flex-direction: column;
+  justify-content: left;
   gap: 4px;
-  max-width: 65%;
+  max-width: 100%;
 }
 
 .tasks-item_info a {

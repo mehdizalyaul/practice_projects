@@ -15,18 +15,32 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await login(email, password);
-    if (res.success) {
-      if (res.user.role === "admin") {
-        console.log("admin");
-        navigate("/");
-      } else if (res.user.role === "user") {
-        console.log("user");
 
-        navigate("/tasks/mine");
+    try {
+      const res = await login(email, password);
+
+      // check if user exists
+      if (!res || !res.user) {
+        setError(res?.message || "Login failed");
+        return;
       }
-    } else {
-      setError(res.message);
+
+      const role = res.user.role;
+
+      if (!role) {
+        setError("User role not available yet");
+        return;
+      }
+
+      if (role === "admin") {
+        navigate("/");
+      } else if (role === "user") {
+        navigate("/tasks/mine");
+      } else {
+        setError("Unknown role");
+      }
+    } catch (err) {
+      setError(err.message || "Login error");
     }
   };
 
